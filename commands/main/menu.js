@@ -24,8 +24,8 @@ export default {
       const botname2 = botSettings.namebot2 || '';
       const banner = botSettings.banner || '';
       const owner = botSettings.owner || '';
-      const canalId = botSettings.id || '120363420992828502@newsletter';
-      const canalName = botSettings.nameid || '𐚁๋࣭⭑ֶָ֢ ѕтєℓℓαя ωα ⚡︎ ¢нαηηєℓ ₍ᐢ..ᐢ₎♡';
+      const canalId = botSettings.id || '120363188537623366@newsletter';
+      const canalName = botSettings.nameid || '𐚁๋࣭⭑ֶָ֢ YumiBot ωα ⚡︎ ¢нαηηєℓ ₍ᐢ..ᐢ₎♡';
       const link = botSettings.link || bot.api;
 
       const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net';
