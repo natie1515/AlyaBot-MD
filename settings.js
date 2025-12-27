@@ -15,14 +15,14 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
-global.owner = ['5492916450307', '59169082575', '573019448245', '5216677510398', '5491139010575']
+global.owner = ['559296077349', '59169082575', '573019448245', '5216677510398', '5491139010575']
 
 global.sessionName = 'Sessions/Owner'
 global.version = '^1.0'
 global.pairing_code = true
 global.number_bot = ''
 global.msgglobal = '[Error: *TypeError*] fetch failed'
-global.dev = '☄︎ ᴘᴏᴡᴇʀᴇᴅ ʙʏ sᴛᴇʟʟᴀʀ'
+global.dev = ' 𓆩‌۫᷼ ִֶָღ݉͢𝓢𝓪𝓻𝓪𝓱𓆪‌‹࣭݊𓂃ⷪ ִֶָ ᷫ‹ ⷭ.࣭𓆩‌۫᷼Ⴕ۫͜𓆪‌'
 
 global.api = {
   url: 'https://api.stellarwa.xyz',
