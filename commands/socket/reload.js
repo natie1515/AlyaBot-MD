@@ -1,5 +1,3 @@
-/*import { startModBot } from '../../lib/mods.js';
-import { startPremBot } from '../../lib/prems.js';
 import { startSubBot } from '../../lib/subs.js';
 import fs from 'fs';
 import path from 'path';
@@ -27,15 +25,9 @@ export default {
     const botSettings = global.db.data.settings[botId] || {}
 
     const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'
-    const isPremiumBot = botSettings.botprem === true
-    const isModBot = botSettings.botmod === true
 
     const botType = isOficialBot
       ? 'Principal/Owner'
-      : isPremiumBot
-        ? 'Premium'
-        : isModBot
-          ? 'Main'
           : 'Sub Bot'
 
     const caption = `🍒 *Sesión del bot reiniciada correctamente!*.`
@@ -46,15 +38,9 @@ export default {
    // setTimeout(() => {
       if (botType === 'Sub Bot') {
         startSubBot(m, client, caption, false, phone, chatId, {}, true)
-      } else if (botType === 'Main') {
-        startModBot(m, client, caption, false, phone, chatId, {}, true)
-      } else if (botType === 'Premium') {
-        startPremBot(m, client, caption, false, phone, chatId, {}, true)
-      } else {
-       // startModBot(m, client, caption, false, phone, chatId, {}, true)
-      }
+      } 
    // }, 3000)
 
     await client.reply(m.chat, caption, m)
   },
-};*/
+};
