@@ -206,6 +206,15 @@ cd && cd AlyaBot-MD && rm -rf Sessions/Owner && npm start
 
 ---
 
+### 🌱 Colaboradores
+<a href="https://github.com/Legna-chan">
+  <img src="https://github.com/Legna-chan.png?size=100" width="100" style="border-radius:50%;" />
+</a> <a href="https://github.com/The-King-Destroy">
+  <img src="https://github.com/The-King-Destroy.png?size=100" width="100" style="border-radius:50%;" />
+</a> <a href="https://github.com/Stellar-Api">
+  <img src="https://github.com/Stellar-Api.png?size=100" width="100" style="border-radius:50%;" />
+</a>
+
 ### 🌱 Agradecimientos
 [![Carlos](https://github.com/AzamiJs.png?size=100)](https://github.com/AzamiJs)
 
