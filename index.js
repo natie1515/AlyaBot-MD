@@ -64,11 +64,11 @@ let phoneInput = "";
 
 const { say } = cfonts
 
-say('alya san', {
+say('alya', {
 align: 'center',           
 gradient: ['red', 'blue'] 
 })
-say('WhatsApp Bot', {
+say('WhatsApp Multi Device, Hecho Con Amor Por ZyxlJs', {
 font: 'console',
 align: 'center',
 gradient: ['blue', 'magenta']
