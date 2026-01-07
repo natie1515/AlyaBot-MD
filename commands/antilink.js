@@ -11,7 +11,7 @@ const joinCommands = [
   '!invite', '.invite', '+invite'
 ]
 
-export async function before(m, client) {
+export default async (m, client) => {
   if (!m.isGroup || !m.text) return
 
   const groupMetadata = await client.groupMetadata(m.chat).catch(() => null)
