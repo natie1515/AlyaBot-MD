@@ -2,7 +2,6 @@ import yts from 'yt-search';
 import fetch from 'node-fetch';
 import { getBuffer } from '../../lib/message.js';
 import { toPTT } from '../../lib/converter.js'
-import sharp from 'sharp';
 const limit = 100
 
 const isYTUrl = (url) => /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i.test(url)
