@@ -276,50 +276,6 @@ return console.log(chalk.bold.white(chalk.bgMagenta(`🪶  CÓDIGO DE VINCULACI�
   }
 }
 
- function enqueue(task) {
-  queue.push(task)
-  run()
-}
-
-async function run() {
-  if (running) return
-  running = true
-
-  while (queue.length) {
-    const job = queue.shift()
-    try {
-      await job()
-    } catch (e) {
-      if (String(e).includes('rate-overlimit')) {
-        console.log('Rate limit detectado, reintentando…')
-        await new Promise(r => setTimeout(r, 2000))
-        queue.unshift(job)
-      } else {
-        console.error('Send error:', e)
-      }
-    }
-    await new Promise(r => setTimeout(r, DELAY))
-  }
-
-  running = false
-}
-
-export function patchSendMessage(client) {
-  if (client._sendMessagePatched) return
-  client._sendMessagePatched = true
-
-  const original = client.sendMessage.bind(client)
-
-  client.sendMessage = (jid, content, options = {}) => {
-    return new Promise((resolve, reject) => {
-      enqueue(async () => {
-        const res = await original(jid, content, options)
-        resolve(res)
-      })
-    })
-  }
-}
-
 (async () => {
     global.loadDatabase()
     console.log(chalk.gray('[ ✿  ]  Base de datos cargada correctamente.'))
