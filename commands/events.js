@@ -10,6 +10,9 @@ export default async (client, m) => {
       const botId = client.user.id.split(':')[0] + '@s.whatsapp.net'
       const primaryBotId = chat?.primaryBot
 
+      const isSelf = global.db.data.settings[botId]?.self ?? false
+      if (isSelf) return
+
       const now = new Date()
       const colombianTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }))
       const tiempo = colombianTime.toLocaleDateString('en-GB', {
