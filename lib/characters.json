@@ -1690,4 +1690,88 @@
      "source": "Dragon Ball",
      "keyword": "goku" 
   }
+  {
+     "name": "Lucy",
+     "value": 28496,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "lucy_(cyberpunk)"
+  },
+  {
+     "name": "Rebecca",
+     "value": 26356,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "rebecca_(cyberpunk)"
+  },
+  {
+     "name": "Kiwi",
+     "value": 7186,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "kiwi_(cyberpunk)"
+  },
+  {
+     "name": "Dorio",
+     "value": 6186,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "dorio_(cyberpunk)"
+  },
+  {
+     "name": "Sasha Yakovleva",
+     "value": 5186,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "sasha_(cyberpunk)"
+  },
+  {
+     "name": "Gloria Martinez",
+     "value": 12286,
+     "gender": "Mujer",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "gloria_martinez"
+  },
+  {
+     "name": "Maine",
+     "value": 16186,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "maine_(cyberpunk)"
+  },
+  {
+     "name": "Falco",
+     "value": 14176,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "falco_(cyberpunk)"
+  },
+  {
+     "name": "Adam Smasher",
+     "value": 11726,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "adam_smasher"
+  },
+  {
+     "name": "Pilar",
+     "value": 13456,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "pilar_(cyberpunk)"
+  },
+  {
+     "name": "Ripperdoc",
+     "value": 9186,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "ripperdoc_(cyberpunk_edgerunners)"
+  },
+  {
+     "name": "David Martinez",
+     "value": 27139,
+     "gender": "Hombre",
+     "source": "Cyberpunk: Edgerunners",
+     "keyword": "david_martinez"
+  }
 ]
