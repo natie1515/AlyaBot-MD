@@ -4,15 +4,15 @@ export default {
   run: async (client, m, args, command) => {
 
     if (!args[0]) {
-      return m.reply('ꕥ Ingrese un enlace de *Facebook*')
+      return m.reply('🫛 Ingrese un enlace de *Facebook*')
     }
 
     if (!args[0].match(/facebook\.com|fb\.watch|video\.fb\.com/)) {
-      return m.reply('《✧》Por favor, envía un link de Facebook válido')
+      return m.reply('🌵 Por favor, envía un link de Facebook válido')
     }
 
     try {
-      const videoUrl = `${api.url}/dl/facebookv2?url=${args[0]}&key=${api.key}`
+      const videoUrl = `${api.url}/dl/facebookv3?url=${args[0]}&key=${api.key}`
 
       const response = await fetch(videoUrl)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
