@@ -31,12 +31,6 @@ export default async (client, m) => {
 
         const fakeContext = {
           contextInfo: {
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-              newsletterJid: global.db.data.settings[botId].id,
-              serverMessageId: '0',
-              newsletterName: global.db.data.settings[botId].nameid
-            },
             externalAdReply: {
               title: global.db.data.settings[botId].namebot,
               body: dev,
