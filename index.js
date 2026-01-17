@@ -25,8 +25,6 @@ import db from "./lib/system/database.js";
 import { startSubBot } from './lib/subs.js';
 import { exec, execSync } from "child_process";
 
-web()
-
 const log = {
   info: (msg) => console.log(chalk.bgBlue.white.bold(`INFO`), chalk.white(msg)),
   success: (msg) =>
@@ -238,7 +236,7 @@ return console.log(chalk.bold.white(chalk.bgMagenta(`🪶  CÓDIGO DE VINCULACI�
 
     if (connection == "open") {
      // client.uptime = Date.now();
-   //  await web(client)
+      web(client)
  console.log(boxen(chalk.bold(' ¡CONECTADO CON WHATSAPP! '), { borderStyle: 'round', borderColor: 'green', title: chalk.green.bold('● CONEXIÓN ●'), titleAlignment: 'center', float: 'center' }))
     }
 })
