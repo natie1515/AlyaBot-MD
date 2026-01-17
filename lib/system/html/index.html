@@ -1743,11 +1743,6 @@ main {
             </div>
 
             <div class="form-row">
-                <label for="edit-canal">Canal de WhatsApp</label>
-                <input type="text" id="edit-canal" placeholder="Enlace oficial del canal">
-            </div>
-
-            <div class="form-row">
                 <label for="edit-currency">Monedas</label>
                 <input type="text" id="edit-currency" placeholder="Moneda para el sistema de puntos">
             </div>
@@ -2011,7 +2006,6 @@ async function requestCode() {
                     icon: config.icon || 'https://cdn.sockywa.xyz/files/RTnq.jpeg',
                     longName: config.namebot || 'Alya San',
                     shortName: config.namebot2 || 'Alya',
-                    canal: config.canal || 'https://whatsapp.com/channel/0029VbApwZ9ISTkEBb6ttS3F',
                     prefix: config.prefijo || '/',
                     owner: config.owner || 'Oculto por privacidad',
                     currency: config.currency || 'Coins',
@@ -2182,7 +2176,6 @@ async function openModal(idDigits) {
             icon: serverConfig.icon || bot.icon,
             longName: serverConfig.namebot || bot.longName,
             shortName: serverConfig.namebot2 || bot.shortName,
-            canal: serverConfig.canal || bot.canal,
             prefix: serverConfig.prefijo || bot.prefix,
             owner: serverConfig.owner || bot.owner,
             currency: serverConfig.currency || bot.currency,
@@ -2199,7 +2192,6 @@ async function openModal(idDigits) {
     document.getElementById('edit-shortName').value = bot.shortName;
     document.getElementById('edit-prefix').value = bot.prefix;
     document.getElementById('edit-owner').value = bot.owner;
-    document.getElementById('edit-canal').value = bot.canal;
     document.getElementById('edit-currency').value = bot.currency;
     document.getElementById('edit-link').value = bot.link;
     document.getElementById('edit-icon-url').value = bot.icon;
@@ -2236,7 +2228,6 @@ async function saveBotConfig() {
     const shortName = document.getElementById('edit-shortName').value.trim();
     const prefix = document.getElementById('edit-prefix').value.trim();
     const owner = document.getElementById('edit-owner').value.trim();
-    const canal = document.getElementById('edit-canal').value.trim();
     const currency = document.getElementById('edit-currency').value.trim();
     const link = document.getElementById('edit-link').value.trim();
     const iconUrl = document.getElementById('edit-icon-url').value.trim();
@@ -2264,7 +2255,6 @@ async function saveBotConfig() {
         phone: `+${idDigits}`,
         longName,
         shortName,
-        canal,
         prefix,
         owner,
         banner: bannerUrl,
@@ -2289,7 +2279,6 @@ async function saveBotConfig() {
             shortName: data.config?.namebot2 || shortName,
             prefix: data.config?.prefijo || prefix,
             owner: data.config?.owner || owner,
-            canal: data.config?.canal || canal,
             currency: data.config?.currency || currency,
             link: data.config?.link || link,
             icon: data.config?.icon || iconUrl,
@@ -2310,7 +2299,6 @@ async function saveBotConfig() {
             shortName,
             prefix,
             owner,
-            canal,
             currency,
             link,
             icon: iconUrl,
