@@ -1648,8 +1648,6 @@ main {
                 <label for="botType">Tipo de Bot</label>
                 <select id="botType">
                     <option value="subbot">SubBot</option>
-                    <option value="moderador">Main</option>
-                    <option value="premium">Premium</option>
                 </select>
                 <i class="fas fa-sitemap input-icon"></i>
             </div>
@@ -1876,7 +1874,7 @@ function validateUrl(input, previewId) {
 
 async function getBotConfigs(phone) {
     try {
-        const res = await fetch('https://bot.stellarwa.xyz/ver-configs', {
+        const res = await fetch('/ver-configs', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ phone })
@@ -1986,7 +1984,7 @@ async function requestCode() {
             token: (botType.value === 'moderador' || botType.value === 'premium') ? botToken.value.trim() : ''
         };
 
-        const res = await fetch('https://bot.stellarwa.xyz/start-pairing', {
+        const res = await fetch('/start-pairing', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
@@ -2009,8 +2007,8 @@ async function requestCode() {
                     botType: botType.value,
                     createdAt: Date.now(),
                     updatedAt: Date.now(),
-                    banner: config.banner || 'https://cdn.stellarwa.xyz/files/kH2N.jpeg',
-                    icon: config.icon || 'https://cdn.stellarwa.xyz/files/RTnq.jpeg',
+                    banner: config.banner || 'https://cdn.sockywa.xyz/files/kH2N.jpeg',
+                    icon: config.icon || 'https://cdn.sockywa.xyz/files/RTnq.jpeg',
                     longName: config.namebot || 'Alya San',
                     shortName: config.namebot2 || 'Alya',
                     canal: config.canal || 'https://whatsapp.com/channel/0029VbApwZ9ISTkEBb6ttS3F',
@@ -2061,7 +2059,7 @@ async function loadBots() {
         }
 
         for (const bot of localBots) {
-            const statusResponse = await fetch(`https://bot.stellarwa.xyz/bots/status?phone=${bot.idDigits}`);
+            const statusResponse = await fetch(`/bots/status?phone=${bot.idDigits}`);
             const statusData = await statusResponse.json();
 
             const lastUpdate = new Date(bot.updatedAt);
@@ -2127,7 +2125,7 @@ async function deleteBot(idDigits) {
 
     if (conf.isConfirmed) {
         try {
-            const res = await fetch('https://bot.stellarwa.xyz/delete-bot', {
+            const res = await fetch('/delete-bot', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -2276,7 +2274,7 @@ async function saveBotConfig() {
     };
 
     try {
-        const res = await fetch('https://bot.stellarwa.xyz/edit-bot', {
+        const res = await fetch('/edit-bot', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
