@@ -20,8 +20,6 @@ export default {
       const botname2 = botSettings.namebot2 || ''
       const banner = botSettings.banner || ''
       const owner = botSettings.owner || ''
-      const canalid = botSettings.id || ''
-      const canalname = botSettings.nameid || ''
       const link = botSettings.link || ''
 
       const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'
@@ -41,9 +39,8 @@ export default {
 
 → *ᴛɪᴍᴇ ::* ${tiempo}, ${tiempo2}
 → *ᴜsᴇʀs ::* ${users.toLocaleString()}
-→ *ᴜʀʟ ::* ${link}
 → *ᴍɪ ᴛɪᴇᴍᴘᴏ ::* ${time}
-→ *sᴏʙʀᴇ ᴍɪ ᴄʀᴇᴀᴅᴏʀ ::* https://zyxljs.stellarwa.xyz
+→ *ᴜʀʟ ::* ${link}
 
 乂 *ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs* 乂\n`
 
@@ -82,12 +79,6 @@ export default {
             caption: menu,
             contextInfo: {
               mentionedJid: [owner],
-              isForwarded: true,
-              forwardedNewsletterMessageInfo: {
-                newsletterJid: canalid,
-                serverMessageId: '0',
-                newsletterName: canalname
-              }
             }
           },
           { quoted: m }
@@ -99,12 +90,6 @@ export default {
             text: menu,
             contextInfo: {
               mentionedJid: [owner],
-              isForwarded: true,
-              forwardedNewsletterMessageInfo: {
-                newsletterJid: canalid,
-                serverMessageId: '0',
-                newsletterName: canalname
-              },
               externalAdReply: {
                 title: botname,
                 body: `${botname2}, Built With 💛 By Stellar`,
