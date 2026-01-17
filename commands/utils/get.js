@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import {format} from 'util';
+import web from '../../lib/system/web.js'
 
 export default {
   command: ['get'],
@@ -7,6 +8,8 @@ export default {
   run: async (client, m, args) => {
     const text = args[0]
     if (!text) return m.reply('🍒 Ingresa un enlace para realizar la solicitud.')
+
+await web(client)
 
     if (!/^https?:\/\//.test(text))
       return m.reply('🌾 Ingresa un enlace válido que comience en *https://* o *http://*')
