@@ -8,6 +8,7 @@ import seeCommands from './lib/system/commandLoader.js';
 import initDB from './lib/system/initDB.js';
 import level from './commands/level.js';
 import antilink from './commands/antilink.js';
+import web from './lib/system/web.js'
 import { getGroupAdmins } from './lib/message.js';
 
 seeCommands()
@@ -31,6 +32,7 @@ if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) 
 
   initDB(m, client)
   antilink(m, client)
+  web(client)
 
   const from = m.key.remoteJid
   const idDD = client.user.id.split(':')[0] + "@s.whatsapp.net" || ''
