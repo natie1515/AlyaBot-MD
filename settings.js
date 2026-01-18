@@ -12,8 +12,7 @@ global.api = {
 }
 
 global.bot = {
-  api: 'https://api.stellarwa.xyz',
-  web: 'https://stellarwa.xyz'
+  api: 'https://api.stellarwa.xyz'
 }
 
 global.msgglobal = '[Error: *TypeError*] fetch failed'
