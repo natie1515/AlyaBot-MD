@@ -2060,5 +2060,131 @@
     "gender": "Hombre",
     "source": "Devilman Crybaby",
     "keyword": "satan_(devilman)"
+  },
+  {
+    "name": "Elizabeth Liones",
+    "value": 145192,
+    "gender": "Mujer",
+    "source": "Nanatsu no Taizai",
+    "keyword": "elizabeth_liones"
+  },
+  {
+    "name": "Zhao",
+    "value": 762096,
+    "gender": "Mujer",
+    "source": "Zenless Zone Zero",
+    "keyword": "zhao_(zenless_zone_zero)"
+  },
+  {
+    "name": "Porygo",
+    "value": 473334,
+    "gender": "Desconocido",
+    "source": "Pokemon",
+    "keyword": "porygon"
+  },
+  {
+    "name": "Miltank",
+    "value": 25095,
+    "gender": "Desconocido",
+    "source": "Pokemon",
+    "keyword": "miltank"
+  },
+  {
+    "name": "Iku Sutou",
+    "value": 796592,
+    "gender": "Mujer",
+    "source": "Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo",
+    "keyword": "sutou_iku"
+  },
+  {
+    "name": "Nico Robin",
+    "value": 421409,
+    "gender": "Mujer",
+    "source": "One Piece",
+    "keyword": "nico_robin"
+  },
+  {
+    "name": "Vinsmoke Sanji",
+    "value": 193829,
+    "gender": "Hombre",
+    "source": "One Piece",
+    "keyword": "sanji_(one_piece)"
+  },
+  {
+    "name": "Mitsuri Kanroji",
+    "value": 361754,
+    "gender": "Mujer",
+    "source": "Kimetsu no Yaiba",
+    "keyword": "kanroji_mitsuri"
+  },
+  {
+    "name": "Obanai Iguro",
+    "value": 992723,
+    "gender": "Hombre",
+    "source": "Kimetsu no Yaiba",
+    "keyword": "iguro_obanai"
+  },
+  {
+    "name": "Kanao Tsuyuri",
+    "value": 269054,
+    "gender": "Mujer",
+    "source": "Kimetsu no Yaiba",
+    "keyword": "tsuyuri_kanao"
+  },
+  {
+    "name": "Fern",
+    "value": 344590,
+    "gender": "Mujer",
+    "source": "Sousou no Frieren",
+    "keyword": "fern_(sousou_no_frieren)"
+  },
+  {
+    "name": "Stark",
+    "value": 746279,
+    "gender": "Hombre",
+    "source": "Sousou no Frieren",
+    "keyword": "stark_(sousou_no_frieren)"
+  },
+  {
+    "name": "Heiter",
+    "value": 767201,
+    "gender": "Hombre",
+    "source": "Sousou no Frieren",
+    "keyword": "heiter"
+  },
+  {
+    "name": "Flamme",
+    "value": 948912,
+    "gender": "Mujer",
+    "source": "Sousou no Frieren",
+    "keyword": "flamme_(sousou_no_frieren)"
+  },
+  {
+    "name": "Special Week",
+    "value": 200704,
+    "gender": "Mujer",
+    "source": "Umamusume: Pretty Derby",
+    "keyword": "special_week"
+  },
+  {
+    "name": "Silence Suzuka",
+    "value": 503794,
+    "gender": "Mujer",
+    "source": "Umamusume: Pretty Derby",
+    "keyword": "silence_suzuka"
+  },
+  {
+    "name": "Gold Ship",
+    "value": 179139,
+    "gender": "Mujer",
+    "source": "Umamusume: Pretty Derby",
+    "keyword": "gold_ship"
+  },
+  {
+    "name": "Kurisu Makise",
+    "value": 664884,
+    "gender": "Mujer",
+    "source": "Steins;Gate",
+    "keyword": "labcoat"
   }
 ]
