@@ -19,7 +19,7 @@ global.msgglobal = '[Error: *TypeError*] fetch failed'
 globalThis.dev = 'ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴɪɢʜᴛ ʟɪɢʜᴛ ⚡︎'
 
 global.mess = {
-  socket: '《✧》 Este comando solo puede ser ejecutado por un Socket.',
-  admin: '《✧》 Este comando solo puede ser ejecutado por los Administradores del Grupo.',
-  botAdmin: '《✧》 Este comando solo puede ser ejecutado si el Socket es Administrador del Grupo.'
+  socket: '🌵 Este comando solo puede ser ejecutado por un Socket.',
+  admin: '🌵 Este comando solo puede ser ejecutado por los Administradores del Grupo.',
+  botAdmin: '🌵 Este comando solo puede ser ejecutado si el Socket es Administrador del Grupo.'
 }
