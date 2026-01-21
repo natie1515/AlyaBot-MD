@@ -27,10 +27,10 @@ const sender = m.sender
     m.message.templateButtonReplyMessage?.selectedId ||
     ''
 
-if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return
-
   initDB(m, client)
   antilink(m, client)
+
+if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return
 
   const from = m.key.remoteJid
   const idDD = client.user.id.split(':')[0] + "@s.whatsapp.net" || ''
