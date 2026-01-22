@@ -99,7 +99,7 @@ console.log(`𝄢 · • —– ٠ ✤ ٠ —– • · · • —– ٠ ✤ ٠ 
 const hasPrefix = settings.prefijo === true ? true : (Array.isArray(settings.prefijo) ? settings.prefijo : typeof settings.prefijo === 'string' ? [settings.prefijo] : []).some(p => m.text?.startsWith(p))
 
 function getAllSessionBots() {
-  const sessionDirs = ['./Sessions/Subs', './Sessions/Mods', './Sessions/Prems']
+  const sessionDirs = ['./Sessions/Subs']
   let bots = []
   for (const dir of sessionDirs) {
     try {
