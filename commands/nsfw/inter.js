@@ -35,15 +35,10 @@ const commandAliases = {
 export default {
    command: ['anal', 'cum', 'undress', 'encuerar', 'fuck', 'coger', 'spank', 'nalgada', 'lickpussy', 'fap', 'paja', 'grope', 'sixnine', '69', 'suckboobs', 'grabboobs', 'blowjob', 'bj', 'boobjob', 'footjob'],
   category: 'nsfw',
-  run: async (client, m) => {
+  run: async (client, m, args, command, text, prefix) => {
 
-    if (!db.data.chats[m.chat].nsfw) return m.reply('✐ Los comandos de *NSFW* están desáctivados en este Grupo.')
+    if (!db.data.chats[m.chat].nsfw) return m.reply('🌵 Los comandos de *NSFW* están desáctivados en este Grupo.')
 
-    if (!m.text || !globalThis.prefix || typeof globalThis.prefix.exec !== 'function') return
-    const match = globalThis.prefix.exec(m.text)
-    if (!match) return
-    const usedPrefix = match[0]
-    const command = m.text.slice(usedPrefix.length).trim().split(' ')[0].toLowerCase()
     const currentCommand = commandAliases[command] || command
     if (!captions[currentCommand]) return
 
