@@ -17,49 +17,38 @@ export default async (client, m) => {
 
 const sender = m.sender 
 
-  let body =
-    m.message.conversation ||
-    m.message.extendedTextMessage?.text ||
-    m.message.imageMessage?.caption ||
-    m.message.videoMessage?.caption ||
-    m.message.buttonsResponseMessage?.selectedButtonId ||
-    m.message.listResponseMessage?.singleSelectReply?.selectedRowId ||
-    m.message.templateButtonReplyMessage?.selectedId ||
-    ''
+  let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
   initDB(m, client)
-  antilink(m, client)
+  antilink(client, m)
 
-if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return
-
-  const from = m.key.remoteJid
-  const idDD = client.user.id.split(':')[0] + "@s.whatsapp.net" || ''
-  const rawPrefijo = global.db.data.settings[idDD].prefijo || ''
-  const prefas = Array.isArray(rawPrefijo) ? rawPrefijo : rawPrefijo ? [rawPrefijo] : ['#', '/'] || ['#', '/']
-
-const rawBotname = global.db.data.settings[idDD].namebot2 || 'Alya'
-const tipo = global.db.data.settings[idDD].type || 'Sub'
-
+const from = m.key.remoteJid
+const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net' || client.user.lid
+const chat = global.db.data.chats[m.chat] || {}
+const settings = global.db.data.settings[botJid] || {}  
+const rawBotname = settings.namebot2 || 'Alya'
+const tipo = settings.type || 'Sub'
 const isValidBotname = /^[\w\s]+$/.test(rawBotname)
-const botname2 = isValidBotname ? rawBotname : 'San'
-
-const shortForms = [
-  botname2.charAt(0),
-  botname2.split(" ")[0],
-  tipo.split(" ")[0],
-  botname2.split(" ")[0].slice(0, 2),
-  botname2.split(" ")[0].slice(0, 3)
-]
-
+const namebot = isValidBotname ? rawBotname : 'Alya'
+const shortForms = [namebot.charAt(0), namebot.split(" ")[0], tipo.split(" ")[0], namebot.split(" ")[0].slice(0, 2), namebot.split(" ")[0].slice(0, 3)]
 const prefixes = shortForms.map(name => `${name}`)
-prefixes.unshift(botname2)
+prefixes.unshift(namebot)
 
-const prefixo = prefas.join('')
-
-globalThis.prefix = new RegExp(`^(${prefixes.join('|')})?[${prefixo}]`, 'i')
-
-  const prefixMatch = body.match(globalThis.prefix)
-  const prefix = prefixMatch ? prefixMatch[0] : null
+let prefix
+if (Array.isArray(settings.prefijo) || typeof settings.prefijo === 'string') {
+const prefixArray = Array.isArray(settings.prefijo) ? settings.prefijo : [settings.prefijo]
+prefix = new RegExp('^(' + prefixes.join('|') + ')?(' + prefixArray.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')', 'i')
+} else if (settings.prefijo === true) {
+prefix = new RegExp('^', 'i')
+} else {
+prefix = new RegExp('^(' + prefixes.join('|') + ')?', 'i')
+}
+const strRegex = (str) => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+let pluginPrefix = client.prefix ? client.prefix : prefix
+let matchs = pluginPrefix instanceof RegExp ? [[pluginPrefix.exec(m.text), pluginPrefix]] : Array.isArray(pluginPrefix) ? pluginPrefix.map(p => {
+let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
+return [regex.exec(m.text), regex]}) : typeof pluginPrefix === 'string' ? [[new RegExp(strRegex(pluginPrefix)).exec(m.text), new RegExp(strRegex(pluginPrefix))]] : [[null, null]]
+let match = matchs.find(p => p[0])
 
 const tf = global.db.data.chats[from].users[m.sender] || {}
 const to = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-') 
@@ -67,15 +56,15 @@ if (!tf.stats) tf.stats = {}
 if (!tf.stats[to]) tf.stats[to] = { msgs: 0, cmds: 0 }
 tf.stats[to].msgs++
 
-  if (!prefix) return
+  if (!match) return
 
-  const args = body.slice(prefix.length).trim().split(/ +/)
-  const command = args.shift()?.toLowerCase()
+  let usedPrefix = (match[0] || [])[0] || ''
+  let args = m.text.slice(usedPrefix.length).trim().split(" ")
+  let command = (args.shift() || '').toLowerCase()
+
   const text = args.join(' ')
 
   const pushname = m.pushName || 'Sin nombre'
-  const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net' || client.user.lid
-  const chat = global.db.data.chats[m.chat] || {}
 
 let groupMetadata = null
 let groupAdmins = []
@@ -106,11 +95,11 @@ console.log(`𝄢 · • —– ٠ ✤ ٠ —– • · · • —– ٠ ✤ ٠ 
 ❚ ▸ ${chalk.green('𝐈𝐃 ❱❱')} ${chalk.cyan(m.isGroup ? from : 'Chat Privado')}
 𝄢 · • —– ٠ ✤ ٠ —– • · · • —– ٠ ✤ ٠ —– • ·✧༄`)  
 }
-const prefixxy = ['/', '#', '!', '-', '+', '.']
-const hasPrefix = prefixxy.some(prefix => m.text?.startsWith(prefix))
+
+const hasPrefix = settings.prefijo === true ? true : (Array.isArray(settings.prefijo) ? settings.prefijo : typeof settings.prefijo === 'string' ? [settings.prefijo] : []).some(p => m.text?.startsWith(p))
 
 function getAllSessionBots() {
-  const sessionDirs = ['./Sessions/Subs']
+  const sessionDirs = ['./Sessions/Subs', './Sessions/Mods', './Sessions/Prems']
   let bots = []
   for (const dir of sessionDirs) {
     try {
@@ -185,6 +174,8 @@ if (botprimaryId && botprimaryId !== selfId) {
 
   if (chat.adminonly && !isAdmins) return
 
+if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return
+
     const user = global.db.data.chats[m.chat].users[m.sender] || {}
 
 const today = new Date().toLocaleDateString('es-CO', { 
@@ -202,11 +193,20 @@ if (!user.stats[today]) user.stats[today] = { msgs: 0, cmds: 0 }
     const cmdData = global.comandos.get(command)
 
     if (!cmdData) {
+    if (settings.prefijo === true) return
     await client.readMessages([m.key])
-    return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${prefix}help* para ver la lista de comandos disponibles.`)
+    return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
    }
-    const comando = m.text.slice(prefix.length);
-    if (cmdData.isOwner && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${prefix}help* para ver la lista de comandos disponibles.`)
+    const comando = m.text.slice(usedPrefix.length);
+    if (cmdData.isOwner && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) {
+
+  if (settings.prefijo === true) return
+   return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+    }
+    if (cmdData.isModeration && !global.mods.map(num => num + '@s.whatsapp.net').includes(sender)) {
+ if (settings.prefijo === true) return
+ return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+  }
     if (cmdData.isAdmin && !isAdmins) return client.reply(m.chat, mess.admin, m)
     if (cmdData.botAdmin && !isBotAdmins) return client.reply(m.chat, mess.botAdmin, m)
 
@@ -216,6 +216,7 @@ if (!user.stats[today]) user.stats[today] = { msgs: 0, cmds: 0 }
     const bot = global.db.data.settings[client.user.id.split(':')[0] + "@s.whatsapp.net"] || {}
 
     user2.usedcommands = (user2.usedcommands || 0) + 1
+
     bot.commandsejecut = (bot.commandsejecut || 0) + 1
     user.usedTime = new Date()
     user2.exp = (user2.exp || 0) + Math.floor(Math.random() * 100)
@@ -223,10 +224,9 @@ if (!user.stats[today]) user.stats[today] = { msgs: 0, cmds: 0 }
 
     user.stats[today].cmds++
 
-      await cmdData.run(client, m, args, command, text, prefix)
+      await cmdData.run(client, m, args, command, text, usedPrefix)
     } catch (error) {
-      return m.reply('🌱 Error al ejecutar el comando.')
+      return m.reply('🌱 Error al ejecutar el comando.\n> ' + error)
     }
-
-  level(m)
+   level(m)
 };
