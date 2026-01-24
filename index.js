@@ -149,7 +149,6 @@ async function startBot() {
     version,
     logger,
     printQRInTerminal: false,
-  //  browser: ['Windows', 'Chrome'],
     browser: Browsers.macOS('Chrome'),
     auth: {
       creds: state.creds,
@@ -234,7 +233,6 @@ return console.log(chalk.bold.white(chalk.bgMagenta(`🪶  CÓDIGO DE VINCULACI�
     }
 
     if (connection == "open") {
-     // client.uptime = Date.now();
  console.log(boxen(chalk.bold(' ¡CONECTADO CON WHATSAPP! '), { borderStyle: 'round', borderColor: 'green', title: chalk.green.bold('● CONEXIÓN ●'), titleAlignment: 'center', float: 'center' }))
     }
 })
