@@ -55,10 +55,8 @@ export default {
     }).replace(/^./, m => m.toUpperCase())
 
     const isOficialBot = botId === global.client.user.id.split(':')[0] + "@s.whatsapp.net"
-    const isPremiumBot = botSettings.botprem === true
-    const isModBot = botSettings.botmod === true
 
-    const botType = isOficialBot ? 'Owner' : isPremiumBot ? 'Premium' : isModBot ? 'Main' : 'Sub Bot'
+    const botType = isOficialBot ? 'Owner' : 'Sub Bot'
 
     try {
     const message = `> ꕤ  ˖⁩   ౼ Información :: *${botname2}*
