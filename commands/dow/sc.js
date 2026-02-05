@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import { getBuffer } from '../../lib/message.js';
-import sharp from 'sharp';
 
 export default {
   command: ['sc', 'soundcloud', 'scaudio'],
@@ -41,28 +40,13 @@ export default {
           await client.sendMessage(m.chat, { image: { url: thumbUrl }, caption }, { quoted: m })
 
       const audioBuffer = await getBuffer(dlUrl)
-      const enviarComoDocumento = Math.random() < 0.3;
       let mensaje;
 
-      if (enviarComoDocumento) {
-        const thumbBuffer2 = await sharp(await getBuffer(thumbUrl))
-          .resize(300, 300)
-          .jpeg({ quality: 80 })
-          .toBuffer();
-
-        mensaje = {
-          document: audioBuffer,
-          mimetype: 'audio/mpeg',
-          fileName: `${audioTitle}.mp3`,
-          jpegThumbnail: thumbBuffer2
-        };
-      } else {
         mensaje = {
           audio: audioBuffer,
           mimetype: 'audio/mpeg',
           fileName: `${audioTitle}.mp3`
         };
-      }
 
       await client.sendMessage(m.chat, mensaje, { quoted: m })
 
