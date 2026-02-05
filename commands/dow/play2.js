@@ -1,7 +1,6 @@
 import yts from 'yt-search'
 import fetch from 'node-fetch'
 import { getBuffer } from '../../lib/message.js'
-import sharp from 'sharp'
 
 const isYTUrl = (url) => /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i.test(url)
 
@@ -46,14 +45,10 @@ export default {
         return m.reply('《✧》 No se pudo descargar el *video*, intenta más tarde.')
       }
       const videoBuffer = await getBuffer(video.url)
-      const enviarComoDocumento = Math.random() < 0.4
       let mensaje
-      if (enviarComoDocumento && thumbBuffer && title) {
-        const thumbBuffer2 = await sharp(thumbBuffer).resize(300, 300).jpeg({ quality: 80 }).toBuffer()
-        mensaje = { document: videoBuffer, mimetype: 'video/mp4', fileName: `${title}.mp4`, jpegThumbnail: thumbBuffer2 }
-      } else {
+
         mensaje = { video: videoBuffer, fileName: `${title || 'video'}.mp4`, mimetype: 'video/mp4' }
-      }
+
       await client.sendMessage(m.chat, mensaje, { quoted: m })
     } catch (e) {
       await m.reply(msgglobal)
