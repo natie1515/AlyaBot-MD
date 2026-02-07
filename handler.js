@@ -13,7 +13,6 @@ import { getGroupAdmins } from './lib/message.js';
 seeCommands()
 
 export default async (client, m) => {
-  if (!m.message) return
 
 const sender = m.sender 
 
@@ -85,15 +84,27 @@ const isAdmins = m.isGroup ? groupAdmins.some(p => p.phoneNumber === sender || p
   const fromprimary = global.db.data.chats[from];
   const consolePrimary = fromprimary.primaryBot;
 
-  if (!consolePrimary || consolePrimary === client.user.id.split(':')[0] + '@s.whatsapp.net') {
-console.log(`𝄢 · • —– ٠ ✤ ٠ —– • · · • —– ٠ ✤ ٠ —– • ·✧༄
-❚ ▸ ${chalk.cyan('𝐁𝐎𝐓 ❱❱')} ${chalk.bgMagenta(chalk.white.italic(client.user.id))}
-❚ ▸ ${chalk.cyan('𝐇𝐎𝐑𝐀𝐑𝐈𝐎 ❱❱')} ${chalk.black.bgWhite(moment().format('DD/MM/YY HH:mm:ss'))}
-❚ ${chalk.magentaBright('°o.OO.o°°o.OO.o°°o.OO.o°')}
-❚ ▸ ${chalk.green('𝐔𝐒𝐔𝐀𝐑𝐈𝐎 ❱❱')} ${chalk.white(pushname)}
-❚ ▸ ${chalk.green('𝐆𝐑𝐔𝐏𝐎 ❱❱')} ${chalk.cyan(m.isGroup ? groupName : 'Chat Privado')}
-❚ ▸ ${chalk.green('𝐈𝐃 ❱❱')} ${chalk.cyan(m.isGroup ? from : 'Chat Privado')}
-𝄢 · • —– ٠ ✤ ٠ —– • · · • —– ٠ ✤ ٠ —– • ·✧༄`)  
+  if (m.message || !consolePrimary || consolePrimary === client.user.id.split(':')[0] + '@s.whatsapp.net') {
+
+  console.log(
+    chalk.bold.cyanBright(`▣────────────···
+│❖ BOT :: `) + chalk.bgHex('#6A5ACD')(chalk.white.italic(client.user.id)),
+
+    chalk.bold.magenta(`\n│────────────
+│❖ HORARIO :: `) + chalk.black.bgHex('#FFD700')(moment().format('DD/MM/YY HH:mm:ss')),
+
+    chalk.hex('#FF69B4')(`\n│°o.OO.o°°o.OO.o°°o.OO.o°`),
+
+    chalk.bold.greenBright(`\n│❖ USUARIO :: `) + chalk.hex('#00FA9A')(pushname),
+
+    m.isGroup
+      ? chalk.bold.greenBright(`\n│❖ GRUPO :: `) + chalk.hex('#00BFFF')(groupName) + ' ➜ ' + gradient.rainbow(from)
+      : chalk.bold.greenBright(`\n│❖ PRIVADO :: `) + chalk.hex('#00BFFF')('Chat Privado'),
+
+    chalk.bold.yellow(`\n│❖ ID :: `) + chalk.hex('#FF4500')(m.isGroup ? from : 'Chat Privado'),
+
+    chalk.bold.cyanBright(`\n▣────────────···\n`)
+  );
 }
 
 const hasPrefix = settings.prefijo === true ? true : (Array.isArray(settings.prefijo) ? settings.prefijo : typeof settings.prefijo === 'string' ? [settings.prefijo] : []).some(p => m.text?.startsWith(p))
