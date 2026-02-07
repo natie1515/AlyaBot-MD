@@ -79,7 +79,7 @@ export default {
       categorizedBots.Sub.length
 
     let message = `ꕥ Números de Sockets activos *(${totalBots})*\n\n`
-    message += `ੈ❖‧₊˚ Principales › *${totalCounts.Owner}*\n``
+    message += `ੈ❖‧₊˚ Principales › *${totalCounts.Owner}*\n`
     message += `ੈ✿‧₊˚ Subs › *${totalCounts.Sub}*\n\n`
     message += `➭ *Bots en el grupo ›* ${totalInGroup}\n`
 
