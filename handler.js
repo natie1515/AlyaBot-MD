@@ -98,7 +98,7 @@ const isAdmins = m.isGroup ? groupAdmins.some(p => p.phoneNumber === sender || p
     chalk.bold.greenBright(`\n│❖ USUARIO :: `) + chalk.hex('#00FA9A')(pushname),
 
     m.isGroup
-      ? chalk.bold.greenBright(`\n│❖ GRUPO :: `) + chalk.hex('#00BFFF')(groupName) + ' ➜ ' + gradient.rainbow(from)
+      ? chalk.bold.greenBright(`\n│❖ GRUPO :: `) + chalk.hex('#00BFFF')(groupName)
       : chalk.bold.greenBright(`\n│❖ PRIVADO :: `) + chalk.hex('#00BFFF')('Chat Privado'),
 
     chalk.bold.yellow(`\n│❖ ID :: `) + chalk.hex('#FF4500')(m.isGroup ? from : 'Chat Privado'),
