@@ -38,8 +38,6 @@ export default {
       const link = botSettings.link || ''
 
       const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'
-      const isPremiumBot = botSettings.botprem === true
-      const isModBot = botSettings.botmod === true
       const botType = isOficialBot
         ? 'Owner'
             : 'Sub Bot'
