@@ -1,10 +1,8 @@
-import fs from "fs";
-
 export default {
   command: ["allleave"],
   category: "owner",
   run: async (client, m, args) => {
-    if (!args[0]) return m.reply("Pon el enlace del grupo");
+    if (!args[0]) return m.reply("Pon el link del grupo");
 
     try {
       const code = args[0].split("chat.whatsapp.com/")[1];
@@ -12,25 +10,25 @@ export default {
 
       const group = await client.groupGetInviteInfo(code);
 
-      // Bot principal
-      await client.groupLeave(group.id);
+      m.reply("Sacando bots del grupo...");
 
-      // Sub bots
-      const subs = fs.readdirSync("./Sessions/Subs");
+      const bots = [client, ...(global.conns || [])];
 
-      for (let sub of subs) {
+      for (let i = 0; i < bots.length; i++) {
+        const conn = bots[i];
+
         try {
-          let conn = global.conns?.find(c =>
-            c.user?.id?.includes(sub)
-          );
-          if (conn) await conn.groupLeave(group.id);
+          await conn.groupLeave(group.id);
         } catch {}
+
+        // Espera para evitar flood
+        await new Promise(r => setTimeout(r, 800));
       }
 
-      m.reply("✅ Todos los bots salieron del grupo");
+      m.reply(`✅ ${bots.length} bots salieron del grupo`);
     } catch (e) {
       console.log(e);
-      m.reply("Error al salir");
+      m.reply("Error al salir del grupo");
     }
   }
 };
