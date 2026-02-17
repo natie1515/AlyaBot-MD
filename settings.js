@@ -6,8 +6,8 @@ global.owner = ['559296077349']
 global.sessionName = 'Sessions/Owner'
 
 global.api = {
-  url: 'https://api.nightlight.qzz.io',
-  key: 'DiegoJadiBot'
+  url: 'https://api.stellarwa.xyz',
+  key: 'nekobot' // Saca tu apikey aquí: https://api.stellarwa.xyz
 }
 
 global.mods = [
