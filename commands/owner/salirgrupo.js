@@ -5,7 +5,10 @@ export default {
     if (!args[0]) return m.reply("Pon el link del grupo");
 
     try {
-      const code = args[0].split("chat.whatsapp.com/")[1];
+      const code = args[0]
+        .split("chat.whatsapp.com/")[1]
+        ?.split("?")[0];
+
       if (!code) return m.reply("Link inválido");
 
       const group = await client.groupGetInviteInfo(code);
@@ -21,7 +24,6 @@ export default {
           await conn.groupLeave(group.id);
         } catch {}
 
-        // Espera para evitar flood
         await new Promise(r => setTimeout(r, 800));
       }
 
