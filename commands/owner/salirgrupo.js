@@ -1,33 +1,25 @@
 import fs from 'fs'
-import path from 'path'
 
 export default {
-  command: ['delsub', 'delsession'],
+  command: ['delsub'],
   category: 'socket',
-  owner: true, // opcional: solo dueño
   run: async (client, m, args) => {
-    if (!args[0]) {
-      return m.reply('✎ Usa: delsub número\nEjemplo: delsub 5491122334455')
-    }
+    if (!args[0]) return m.reply('Número?')
 
     const id = args[0].replace(/\D/g, '')
-    const sessionPath = `./Sessions/Subs/${id}`
+    const folder = `./Sessions/Subs/${id}`
 
-    // Cerrar socket si está activo
-    const connIndex = global.conns.findIndex(c => c.userId === id)
-    if (connIndex !== -1) {
-      try {
-        await global.conns[connIndex].ws.close()
-      } catch {}
-      global.conns.splice(connIndex, 1)
+    global.deletedSubs.add(id)
+
+    const conn = global.conns.find(c => c.userId === id)
+    if (conn) {
+      try { conn.ws.close() } catch {}
+      global.conns = global.conns.filter(c => c.userId !== id)
     }
 
-    // Eliminar carpeta
-    if (fs.existsSync(sessionPath)) {
-      fs.rmSync(sessionPath, { recursive: true, force: true })
-      return m.reply(`✅ Sesión eliminada del SubBot ${id}`)
-    } else {
-      return m.reply('⚠️ No existe sesión para ese número.')
-    }
+    if (fs.existsSync(folder))
+      fs.rmSync(folder, { recursive: true, force: true })
+
+    m.reply('Sesión eliminada correctamente')
   }
 }
