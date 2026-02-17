@@ -1,56 +1,33 @@
+import fs from 'fs'
+import path from 'path'
+
 export default {
-  command: ["allleave"],
-  category: "owner",
+  command: ['delsub', 'delsession'],
+  category: 'socket',
+  owner: true, // opcional: solo dueño
   run: async (client, m, args) => {
-    if (!args[0]) return m.reply("Pon link del grupo");
+    if (!args[0]) {
+      return m.reply('✎ Usa: delsub número\nEjemplo: delsub 5491122334455')
+    }
 
-    try {
-      const code = args[0]
-        .split("chat.whatsapp.com/")[1]
-        ?.split("?")[0];
+    const id = args[0].replace(/\D/g, '')
+    const sessionPath = `./Sessions/Subs/${id}`
 
-      if (!code) return m.reply("Link inválido");
-
-      const group = await client.groupGetInviteInfo(code);
-
-      let salieron = 0;
-
-      m.reply("Sacando bots del grupo...");
-
-      // Subbots
-      for (const conn of global.conns || []) {
-        try {
-          const meta = await conn.groupMetadata(group.id);
-
-          const botID =
-            conn.user.id.split(":")[0] + "@s.whatsapp.net";
-
-          const inside = meta.participants.some(
-            p => p.id === botID
-          );
-
-          if (!inside) continue;
-
-          await conn.groupLeave(group.id);
-          salieron++;
-
-          await new Promise(r => setTimeout(r, 700));
-        } catch {}
-      }
-
-      // Bot principal
+    // Cerrar socket si está activo
+    const connIndex = global.conns.findIndex(c => c.userId === id)
+    if (connIndex !== -1) {
       try {
-        await client.groupLeave(group.id);
-        salieron++;
+        await global.conns[connIndex].ws.close()
       } catch {}
+      global.conns.splice(connIndex, 1)
+    }
 
-      if (!salieron)
-        return m.reply("No hay bots en ese grupo.");
-
-      m.reply(`✅ ${salieron} bots salieron del grupo`);
-    } catch (e) {
-      console.log(e);
-      m.reply("Error al salir del grupo");
+    // Eliminar carpeta
+    if (fs.existsSync(sessionPath)) {
+      fs.rmSync(sessionPath, { recursive: true, force: true })
+      return m.reply(`✅ Sesión eliminada del SubBot ${id}`)
+    } else {
+      return m.reply('⚠️ No existe sesión para ese número.')
     }
   }
-};
+}
