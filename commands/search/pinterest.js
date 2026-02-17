@@ -9,7 +9,7 @@ export default {
 
     if (!text) {
       return m.reply(
-        `✿ Ingresa un *término* de búsqueda o un enlace de *Pinterest*.`,
+        `🍒 Ingresa un *término* de búsqueda o un enlace de *Pinterest*.`,
       )
     }
 
@@ -22,9 +22,15 @@ export default {
         const { data: result } = await ress.json()
         const mediaType = ['image', 'video'].includes(result.type) ? result.type : 'document'
 
+        const message2 =
+          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖣𝗈𝗐𝗇𝗅𝗈𝖺𝖽𝖾𝗋  ࣭𑁯ᰍ   ̊ ܃܃\n\n` +
+          `> 🍃 ᩴᩴ̴𖫲᮫ִ۫𝆬  Resultados para tu enlace › *${text}*\n\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Título › *${result.title}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Tipo › *${isVideo ? "Video" : "Imagen"}*`; 
+
         await client.sendMessage(
           m.chat,
-          { [mediaType]: { url: result.dl }, caption: null },
+          { [mediaType]: { url: result.dl }, caption: message2 },
           { quoted: m },
         )
       } else {
@@ -36,28 +42,32 @@ export default {
         const json = jsons.data
 
         if (!json || json.length === 0) {
-          return m.reply(`✿ No se encontraron resultados para *${text}*`)
+          return m.reply(`✐ No se encontraron resultados para *${text}*`)
         }
 
-        const result = json[Math.floor(Math.random() * json.length)]
+        const index = Math.floor(Math.random() * json.length)
+        const result = json[index]
+
         const message =
-          `ꕥ ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖲𝖾𝖺𝗋𝖼𝗁 ࣭𑁯ᰍ   ̊ ܃܃\n\n` +
-          `${result.title ? `𖣣ֶㅤ֯⌗ ✿ ⬭ Título › *${result.title}*\n` : ''}` +
-          `${result.description ? `𖣣ֶㅤ֯⌗ ❀ ⬭ Descripción › *${result.description}*\n` : ''}` +
-          `${result.full_name ? `𖣣ֶㅤ֯⌗ ❑ ⬭ Autor › *${result.full_name}*\n` : ''}` +
-          `${result.likes ? `𖣣ֶㅤ֯⌗ ♡ ⬭ Likes › *${result.likes}*\n` : ''}` +
-          `${result.created ? `𖣣ֶㅤ֯⌗ ✤ ⬭ Publicado › *${result.created}*` : ''}`
+          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖲𝖾𝖺𝗋𝖼𝗁 ࣭𑁯ᰍ   ̊ ܃܃\n\n` +
+          `> 🍃 ᩴᩴ̴𖫲᮫ִ۫𝆬   Resultados para › *${text}*\n\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Título › *${result.title}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Descripción › *${result.description}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Autor › *${result.full_name}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Likes › *${result.likes}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Publicado › *${result.created}*`;
 
         await client.sendMessage(
           m.chat,
-          { image: { url: result.hd || result.url }, caption: message },
+          { image: { url: result.hd }, caption: message },
           { quoted: m },
         )
       }
     } catch (e) {
+     // console.error('[Pinterest Error]', e)
       await client.reply(
         m.chat,
-        msgglobal,
+       msgglobal,
         m
       )
     }
