@@ -15,33 +15,50 @@ export default {
 
     try {
       if (isPinterestUrl) {
-        const pinterestUrl = `${api.url}/dl/pinterest?url=${text}&key=${api.key}`
-        const ress = await fetch(pinterestUrl)
-        if (!ress.ok) throw new Error(`La API devolvió un código de error: ${ress.status}`)
 
-        const { data: result } = await ress.json()
-        const mediaType = ['image', 'video'].includes(result.type) ? result.type : 'document'
+        const pinterestUrl = `${api.url}/dl/pinterest?url=${encodeURIComponent(text)}&key=${api.key}`
+        const ress = await fetch(pinterestUrl)
+
+        if (!ress.ok)
+          throw new Error(`La API devolvió un código de error: ${ress.status}`)
+
+        const json = await ress.json()
+        const result = json.data || json.result || json
+
+        if (!result || !result.dl)
+          throw new Error('Respuesta inválida de API')
+
+        const mediaType =
+          result.type === 'video'
+            ? 'video'
+            : 'image'
 
         const message2 =
-          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖣𝗈𝗐𝗇𝗅𝗈𝖺𝖽𝖾𝗋  ࣭𑁯ᰍ   ̊ ܃܃\n\n` +
-          `> 🍃 ᩴᩴ̴𖫲᮫ִ۫𝆬  Resultados para tu enlace › *${text}*\n\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Título › *${result.title}*\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Tipo › *${isVideo ? "Video" : "Imagen"}*`; 
+          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖣𝗈𝗐𝗇𝗅𝗈𝖺𝖽𝖾𝗋 ࣭𑁯ᰍ ̊ ܃܃\n\n` +
+          `> 🍃 Resultados para tu enlace › *${text}*\n\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Título › *${result.title || 'Sin título'}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Tipo › *${result.type === 'video' ? 'Video' : 'Imagen'}*`
 
         await client.sendMessage(
           m.chat,
           { [mediaType]: { url: result.dl }, caption: message2 },
           { quoted: m },
         )
+
       } else {
-        const pinterestAPI = `${api.url}/search/pinterest?query=${text}&key=${api.key}`
+
+        const pinterestAPI =
+          `${api.url}/search/pinterest?query=${encodeURIComponent(text)}&key=${api.key}`
+
         const res = await fetch(pinterestAPI)
-        if (!res.ok) throw new Error(`La API devolvió un código de error: ${res.status}`)
+
+        if (!res.ok)
+          throw new Error(`La API devolvió un código de error: ${res.status}`)
 
         const jsons = await res.json()
-        const json = jsons.data
+        const json = jsons.data || []
 
-        if (!json || json.length === 0) {
+        if (!json.length) {
           return m.reply(`✐ No se encontraron resultados para *${text}*`)
         }
 
@@ -49,13 +66,13 @@ export default {
         const result = json[index]
 
         const message =
-          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖲𝖾𝖺𝗋𝖼𝗁 ࣭𑁯ᰍ   ̊ ܃܃\n\n` +
-          `> 🍃 ᩴᩴ̴𖫲᮫ִ۫𝆬   Resultados para › *${text}*\n\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Título › *${result.title}*\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Descripción › *${result.description}*\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Autor › *${result.full_name}*\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Likes › *${result.likes}*\n` +
-          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭  Publicado › *${result.created}*`;
+          `🍁 ꨩᰰ𑪐𑂺 ˳ ׄ 𝖯𝗂𝗇𝗍𝖾𝗋𝖾𝗌𝗍 𝖲𝖾𝖺𝗋𝖼𝗁 ࣭𑁯ᰍ ̊ ܃܃\n\n` +
+          `> 🍃 Resultados para › *${text}*\n\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Título › *${result.title || 'Sin título'}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Descripción › *${result.description || 'Sin descripción'}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Autor › *${result.full_name || 'Desconocido'}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Likes › *${result.likes || '0'}*\n` +
+          `𖣣ֶㅤ֯⌗ 🍄̷ ׄ ⬭ Publicado › *${result.created || 'Desconocido'}*`
 
         await client.sendMessage(
           m.chat,
@@ -63,13 +80,10 @@ export default {
           { quoted: m },
         )
       }
+
     } catch (e) {
-     // console.error('[Pinterest Error]', e)
-      await client.reply(
-        m.chat,
-       msgglobal,
-        m
-      )
+      console.log('[Pinterest Error]', e)
+      await client.reply(m.chat, msgglobal, m)
     }
   },
 }
