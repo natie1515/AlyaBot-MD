@@ -2,7 +2,7 @@ export default {
   command: ["allleave"],
   category: "owner",
   run: async (client, m, args) => {
-    if (!args[0]) return m.reply("Pon el link del grupo");
+    if (!args[0]) return m.reply("Pon link del grupo");
 
     try {
       const code = args[0]
@@ -13,19 +13,36 @@ export default {
 
       const group = await client.groupGetInviteInfo(code);
 
-      const bots = [client, ...(global.conns || [])];
-
       let salieron = 0;
 
       m.reply("Sacando bots del grupo...");
 
-      for (const conn of bots) {
+      // Subbots
+      for (const conn of global.conns || []) {
         try {
+          const meta = await conn.groupMetadata(group.id);
+
+          const botID =
+            conn.user.id.split(":")[0] + "@s.whatsapp.net";
+
+          const inside = meta.participants.some(
+            p => p.id === botID
+          );
+
+          if (!inside) continue;
+
           await conn.groupLeave(group.id);
           salieron++;
+
           await new Promise(r => setTimeout(r, 700));
         } catch {}
       }
+
+      // Bot principal
+      try {
+        await client.groupLeave(group.id);
+        salieron++;
+      } catch {}
 
       if (!salieron)
         return m.reply("No hay bots en ese grupo.");
