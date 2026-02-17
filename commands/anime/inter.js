@@ -276,7 +276,12 @@ export default {
     'peek',
   ],
   category: 'anime',
-  run: async (client, m, args, command, text, prefix) => {
+  run: async (client, m) => {
+    if (!m.text || !globalThis.prefix || typeof globalThis.prefix.exec !== 'function') return
+    const match = globalThis.prefix.exec(m.text)
+    if (!match) return
+    const usedPrefix = match[0]
+    const command = m.text.slice(usedPrefix.length).trim().split(' ')[0].toLowerCase()
     const currentCommand = commandAliases[command] || command
     if (!captions[currentCommand]) return
 
@@ -300,7 +305,7 @@ export default {
 
     try {
       const response = await fetch(
-        `${api.url}/sfw/interaction?inter=${currentCommand}&key=${api.key}`,
+        `${api.url}/sfw/interaction?type=${currentCommand}&key=${api.key}`,
       )
       const json = await response.json()
       const { result } = json
