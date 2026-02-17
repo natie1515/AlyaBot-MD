@@ -2,46 +2,48 @@ export default {
   command: ["allleave"],
   category: "owner",
   run: async (client, m, { args }) => {
-    if (!args[0]) return m.reply("⚠️ Por favor, proporciona el link del grupo.");
+    if (!args[0]) return m.reply("⚠️ Pasa el link del grupo.");
 
     try {
-      // Extraer el código de invitación de forma más segura
-      const inviteCode = args[0].split("chat.whatsapp.com/")[1]?.split(" ")[0];
-      if (!inviteCode) return m.reply("❌ Link inválido.");
+      // Limpieza profunda del link para evitar el 'fetch failed'
+      let inviteCode = args[0].split("chat.whatsapp.com/")[1];
+      if (inviteCode.includes("?")) {
+        inviteCode = inviteCode.split("?")[0]; // Elimina el ?mode=gi_t y otros parámetros
+      }
+      inviteCode = inviteCode.trim();
 
-      // Obtener ID del grupo mediante el código
-      const groupData = await client.groupGetInviteInfo(inviteCode);
+      if (!inviteCode) return m.reply("❌ El link no parece ser de WhatsApp.");
+
+      // Obtenemos los datos del grupo (aquí es donde daba el TypeError)
+      const groupData = await client.groupGetInviteInfo(inviteCode).catch(e => {
+         throw new Error("No se pudo obtener info del grupo. ¿El link es válido?");
+      });
+      
       const groupId = groupData.id;
-
-      m.reply("🚀 Iniciando salida masiva de bots...");
-
-      // Lista de todas las conexiones (principal + sub-bots)
       const bots = [client, ...(global.conns || [])];
       let successCount = 0;
 
+      m.reply(`🔄 Intentando sacar ${bots.length} bots de: ${groupData.subject}...`);
+
       for (const conn of bots) {
         try {
-          // Intentar salir del grupo
-          await conn.groupLeave(groupId);
-          successCount++;
-          
-          // Pequeño delay para evitar saturación/baneos
-          await new Promise(r => setTimeout(r, 1000));
-        } catch (err) {
-          // Si falla (ej. el bot no estaba en el grupo), se ignora silenciosamente
+          // Solo intentamos si la conexión está abierta
+          if (conn.ws.readyState === 1) { 
+            await conn.groupLeave(groupId);
+            successCount++;
+          }
+        } catch {
+          // Si no está en el grupo o falla, saltamos al siguiente
           continue;
         }
+        await new Promise(r => setTimeout(r, 1000)); // Delay para evitar baneo
       }
 
-      if (successCount === 0) {
-        return m.reply("ℹ️ Ningún bot estaba en ese grupo o ya habían salido.");
-      }
+      m.reply(`✅ Proceso terminado. Salieron **${successCount}** bots.`);
 
-      m.reply(`✅ Operación finalizada. **${successCount}** bots salieron del grupo correctamente.`);
-      
     } catch (e) {
       console.error(e);
-      m.reply("❌ Error: No se pudo obtener información del grupo. Asegúrate de que el link sea válido.");
+      m.reply(`❌ Error crítico: ${e.message || e}`);
     }
   }
 };
