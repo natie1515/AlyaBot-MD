@@ -93,7 +93,7 @@ export const defSets = {
   commandsejecut: 0,
   type: 'Sub',
   link: 'https://api.stellarwa.xyz',
-  banner: 'https://files.evogb.win/nekotina.jpeg',
+  banner: 'https://files.evogb.win/ZKa9U0.png',
   icon: 'https://files.evogb.win/neko.jpeg',
   currency: '¥enes',
   namebot: 'あ ┊⏤͟͟͞͞☆ Nekotina ϟ',
