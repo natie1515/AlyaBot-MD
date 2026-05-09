@@ -107,7 +107,7 @@ export default {
           menu += `╰╼ׅࣶ፝֟╾╌ֵ╾͜─ํ͜┈ְ ࣭࣪⢏࣭ࣧ⢢࣭ׄ᎐፝֟͟͝᎐࣭ׄ⡔࣭ࣧ⡹࣭ׄ ְ┈ํ͜─͜╼ꨪᰰ╾࣮╌╼ࣶׅ፝֟╾╯ \n`
       }
 
-      menu += `\n> *${botname2} desarrollado por Diego* ૮(˶ᵔᵕᵔ˶)ა`;
+      menu += `\n> *${botname2} desarrollado por ⁿᵏmiwa⚝* ૮(˶ᵔᵕᵔ˶)ა`;
 
 /*let ppUser, yio;
 try {
