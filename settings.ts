@@ -7,7 +7,7 @@ global.sessionName = 'Sessions/Owner'
 
 global.api = {
   url: 'https://api.stellarwa.xyz',
-  key: 'api-sZK51' 
+  key: 'nekotina' 
 }
 
 global.msgglobal = '⋆˚𝜗 There was a problem processing the request, contact the creator or a moderator to fix this issue. (✿◡‿◡)'
