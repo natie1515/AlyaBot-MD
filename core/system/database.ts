@@ -96,9 +96,9 @@ export const defSets = {
   banner: 'https://files.evogb.win/nekotina.jpeg',
   icon: 'https://files.evogb.win/neko.jpeg',
   currency: '¥enes',
-  namebot: 'あ ┊⏤͟͟͞͞☆ Alya San ϟ',
-  namebot2: 'Alya',
-  owner: 'Oculto por privacidad'
+  namebot: 'あ ┊⏤͟͟͞͞☆ Nekotina ϟ',
+  namebot2: 'neko',
+  owner: 'ⁿᵏmiwa⚝'
 };
 
 export const defStickerPack = {
