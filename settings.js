@@ -1,4 +1,3 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
 import fs from 'fs';
 import { watchFile, unwatchFile } from 'fs'
 import { fileURLToPath } from 'url'
