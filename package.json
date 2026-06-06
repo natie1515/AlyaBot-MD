@@ -1,7 +1,7 @@
 {
   "name": "alya",
   "version": "4.0",
-  "description": "WhatsApp multi Device, updated with better performance",
+  "description": "WhatsApp Bot updated to the latest version.",
   "main": "index.js",
   "type": "module",
   "scripts": {
