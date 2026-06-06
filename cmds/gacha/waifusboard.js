@@ -1,21 +1,21 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['waifusboard', 'waifustop', 'topwaifus'],
   category: 'gacha',
   use: '[página]',
   run: async ({ msg, sock, args }) => {
     const chatId = msg.chat
-    const chatData = await getChat(chatId)
+    const chatData = await db.getChat(chatId)
 
     if (chatData.adminonly || !chatData.gacha)
       return msg.reply(mess.comandooff)
 
-    const chatUsers = await getChatUser(chatId)
+    const chatUsers = await db.getChatUser(chatId)
 
     const users = []
     for (const user of chatUsers || []) {
       if (user.characters?.length > 5) {
-        const userData = await getUser(user.user_id) || {}
+        const userData = await db.getUser(user.user_id) || {}
         users.push({
           ...user,
           userId: user.user_id,

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['levelup', 'level', 'lvl'],
@@ -8,8 +8,8 @@ export default {
     const mentioned = msg.mentionedJid
     const who = mentioned.length > 0 ? mentioned[0] : (msg.quoted ? msg.quoted.sender : msg.sender)
 
-    const user = await getUser(who)     
-    const allUsers = await getUser() || []    
+    const user = await db.getUser(who)     
+    const allUsers = await db.getUser() || []    
 
     if (!user)
       return msg.reply(`「✎」 El usuario mencionado no está registrado en el bot.`)

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 async function uploadDix(buffer, mime) {
   const formData = new FormData()
@@ -19,7 +19,7 @@ export default {
   category: 'socket',
   run: async ({ msg, sock, args }) => {
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const config = await getSettings(idBot)
+    const config = await db.getSettings(idBot)
     const owner = config.owner ? config.owner : '' || ''
     const isOwner2 = [idBot, ...global.owner.map((number) => number + '@s.whatsapp.net')].includes(msg.sender)
     if (!isOwner2 && msg.sender !== owner) return msg.reply(mess.socket)
@@ -30,7 +30,7 @@ export default {
 
     if (value.startsWith('http')) {
       config.icon = value
-      await updateSettings(idBot, 'icon', config.icon)
+      await db.updateSettings(idBot, 'icon', config.icon)
       return msg.reply(`❖ Se ha actualizado el icon de *${config.namebot2}*!`)
     }
 
@@ -45,7 +45,7 @@ export default {
     const link = await uploadDix(media, mime)
     config.icon = link
 
-    await updateSettings(idBot, 'icon', config.icon)
+    await db.updateSettings(idBot, 'icon', config.icon)
     return msg.reply(`✿ Se ha actualizado el icon de *${config.namebot2}*!`)
   },
 }

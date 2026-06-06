@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { getDevice, prepareWAMessageMedia } from 'baileys';
 import fs from 'fs';
 import fetch from 'node-fetch';
@@ -26,7 +26,7 @@ export default {
       const tiempo2 = moment.tz('America/Bogota').format('hh:mm A');
 
       const botId = sock?.user?.id.split(':')[0] + '@s.whatsapp.net' || '';
-      const botSettings = await getSettings(botId);
+      const botSettings = await db.getSettings(botId);
       const botname = botSettings.namebot || '';
       const botname2 = botSettings.namebot2 || '';
       const banner = botSettings.banner || '';
@@ -39,7 +39,7 @@ export default {
         ? 'Owner'
         : 'Sub Bot';
 
-      const userr = await getUser();
+      const userr = await db.getUser();
       const users = Object.keys(userr).length || 0;
 
       const time = sock.uptime
@@ -47,7 +47,7 @@ export default {
         : 'Desconocido';
       const device = getDevice(msg.key.id);
 
-      const own = await getUser(owner);
+      const own = await db.getUser(owner);
 
       let menu = `> *¡ʜᴏʟᴀ!* ${msg.pushName}, como está tu día?, mucho gusto mi nombre es *${botname2}* ʚ♡⃛ɞ(ू•ᴗ•ू❁)*
 

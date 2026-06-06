@@ -1,9 +1,9 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import chalk from 'chalk'
 
 const limpiarPersonajesReservados = async () => {
   try {
-    const chats = await getChat() 
+    const chats = await db.getChat() 
     const now = Date.now()
 
     for (const chat of chats) {
@@ -20,7 +20,7 @@ const limpiarPersonajesReservados = async () => {
       })
 
       if (chat.personajesReservados.length !== nuevosPersonajesReservados.length) {
-        await updateChat(chat.id, 'personajesReservados', nuevosPersonajesReservados)
+        await db.updateChat(chat.id, 'personajesReservados', nuevosPersonajesReservados)
         // console.log(chalk.gray(`[ ✿ ] Personajes reservados limpiados en chat ${chat.id}`))
       }
     }

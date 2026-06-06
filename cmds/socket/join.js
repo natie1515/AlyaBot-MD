@@ -1,10 +1,10 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['join', 'unir'],
   isModeration: true,
   run: async ({ msg, sock, args }) => {
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const config = await getSettings(idBot)
+    const config = await db.getSettings(idBot)
     const isOwner2 = [idBot, ...(config.owner ? [config.owner] : []), ...global.mods.map(num => num + '@s.whatsapp.net')].includes(msg.sender)
     if (!isOwner2) return msg.reply(mess.socket)
     if (!args[0]) return msg.reply('《✧》 Ingresa el enlace del grupo para unir el bot.')

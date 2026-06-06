@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { promises as fs } from 'fs';
 
 async function loadCharacters() {
@@ -15,7 +15,7 @@ export default {
   category: 'gacha',
   run: async ({ msg, sock, args }) => {
     const chatId = msg.chat
-    const chatData = await getChat(chatId)
+    const chatData = await db.getChat(chatId)
 
     if (chatData.adminonly || !chatData.gacha)
       return msg.reply(mess.comandooff)
@@ -33,7 +33,7 @@ export default {
       if (animeCharacters.length === 0)
         return msg.reply(`❖ No se encontró el anime con nombre: "${name}".`)
 
-      const chatUsers = await getChatUser(chatId)
+      const chatUsers = await db.getChatUser(chatId)
       
       let claimedCount = 0
       const characterStatus = await Promise.all(animeCharacters.map(async (char) => {
@@ -44,7 +44,7 @@ export default {
         
         if (usuarioPoseedor) {
           claimedCount++
-          const userData = await getUser(usuarioPoseedor.user_id)
+          const userData = await db.getUser(usuarioPoseedor.user_id)
           const estado = `Reclamado por ${userData.name || usuarioPoseedor.user_id.split('@')[0]}`
           return `› *${char.name}* (${char.value}) • ${estado}`
         } else {

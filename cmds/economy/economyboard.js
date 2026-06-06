@@ -1,15 +1,15 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['economyboard', 'eboard', 'baltop'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
 
-    const chatData = await getChat(msg.chat)
-    const chatDataa = await getChatUser(msg.chat)
+    const chatData = await db.getChat(msg.chat)
+    const chatDataa = await db.getChatUser(msg.chat)
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
@@ -18,7 +18,7 @@ export default {
    for (const data of chatDataa || []) {
   const total = (data.coins || 0) + (data.bank || 0)
   if (total >= 1000) {
-    const user = await getUser(data.user_id) || {}
+    const user = await db.getUser(data.user_id) || {}
     const name = user.name || 'User' 
     users.push({ ...data, jid: data.user_id, name })
   }

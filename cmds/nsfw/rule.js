@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fetch from 'node-fetch'
 
 export default {
@@ -7,7 +7,7 @@ export default {
   run: async ({ msg, sock, args, command }) => {
     try {
       const chatId = msg.chat
-     const chat = await getChat(msg.chat)
+     const chat = await db.getChat(msg.chat)
 
     if (!chat.nsfw)
       return msg.reply(

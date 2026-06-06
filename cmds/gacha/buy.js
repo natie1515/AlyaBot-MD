@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 
 function msToTime(duration) {
@@ -26,10 +26,10 @@ export default {
     const chatId = msg.chat
     const userId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const chatConfig = await getChat(chatId)
-    const botSettings = await getSettings(botId)
+    const chatConfig = await db.getChat(chatId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
-    const user = await getChatUser(chatId, userId)
+    const user = await db.getChatUser(chatId, userId)
     const now = Date.now()
 
     if (chatConfig.adminonly || !chatConfig.gacha)
@@ -53,7 +53,7 @@ export default {
       return msg.reply(`✿ Solo puedes reclamar personajes generados con *rollwaifu*.`)
     }
 
-    const chatUsers = await getChatUser(chatId)
+    const chatUsers = await db.getChatUser(chatId)
     const alreadyClaimed = chatUsers.find(u =>
       u.characters?.some(c => c.name?.toLowerCase() === reservedCharacter.name.toLowerCase()),
     )
@@ -61,7 +61,7 @@ export default {
     if (alreadyClaimed) {
       if (alreadyClaimed.user_id === userId)
         return msg.reply(`✤ Tú ya has reclamado a *${reservedCharacter.name}*.`)
-      const userData = await getUser(alreadyClaimed.user_id)
+      const userData = await db.getUser(alreadyClaimed.user_id)
       const ownerName = userData?.name || alreadyClaimed.user_id.split('@')[0]
       return msg.reply(
         `❀ El personaje *${reservedCharacter.name}* ya ha sido reclamado por *${ownerName}*.`,
@@ -70,7 +70,7 @@ export default {
 
     if (reservedCharacter.userId && now < reservedCharacter.reservedUntil) {
       const isUserReserver = reservedCharacter.userId === userId
-      const reserverData = await getUser(reservedCharacter.userId)
+      const reserverData = await db.getUser(reservedCharacter.userId)
       const reserverName = reserverData?.name || reservedCharacter.userId.split('@')[0]
       const secondsLeft = ((reservedCharacter.reservedUntil - now) / 1000).toFixed(1)
       if (!isUserReserver)
@@ -111,12 +111,12 @@ export default {
       p => p.id !== reservedCharacter.id,
     )
     
-    await updateChatUser(chatId, userId, 'characters', user.characters)
-    await updateChatUser(chatId, userId, 'buyCooldown', now + 15 * 60000)
-    await updateChatUser(chatId, userId, 'coins', user.coins - reservedCharacter.value)
-    await updateChat(chatId, 'personajesReservados', personajesReservados)
+    await db.updateChatUser(chatId, userId, 'characters', user.characters)
+    await db.updateChatUser(chatId, userId, 'buyCooldown', now + 15 * 60000)
+    await db.updateChatUser(chatId, userId, 'coins', user.coins - reservedCharacter.value)
+    await db.updateChat(chatId, 'personajesReservados', personajesReservados)
 
-    const userData = await getUser(userId)
+    const userData = await db.getUser(userId)
     const displayName = userData?.name || userId.split('@')[0]
     const duration = ((now - reservedCharacter.expiresAt + 60000) / 1000).toFixed(1)
 

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import sharp from 'sharp'
 import fetch from "node-fetch"
 import { getBuffer } from '#serialize'
@@ -7,7 +7,7 @@ export default {
   command: ["xnxx"],
   run: async ({ msg, sock, args }) => {
 
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
 
     if (!chat.nsfw)
       return msg.reply(mess.nsfw)

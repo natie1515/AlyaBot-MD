@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 
 async function loadCharacters() {
@@ -23,15 +23,15 @@ export default {
     const mentioned = msg.mentionedJid
     const userId = mentioned.length > 0 ? mentioned[0] : (msg.quoted ? msg.quoted.sender : msg.sender)
 
-    const globalUser = await getUser(userId)
+    const globalUser = await db.getUser(userId)
     const name = globalUser?.name || userId.split('@')[0]
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
 
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
 
-    const userData = await getChatUser(chatId, userId)
+    const userData = await db.getChatUser(chatId, userId)
 
     if (!userData?.characters?.length) {
       return msg.reply(

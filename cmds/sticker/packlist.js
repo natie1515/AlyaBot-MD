@@ -1,10 +1,10 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['packlist', 'stickerpacks'],
   category: 'stickers',
   run: async ({ msg, sock, args }) => {
     try {
-      const stickerPackData = await getStickersPack(msg.sender)
+      const stickerPackData = await db.getStickersPack(msg.sender)
       const packs = stickerPackData.packs || []
       if (!packs.length) {
         return msg.reply('《✧》No tienes paquetes de stickers creados.')

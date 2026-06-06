@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 
 function obtenerCharacterValue(name) {
@@ -36,21 +36,21 @@ export default {
     const chatId = msg.chat
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
 
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings?.currency || 'monedas'
 
-    const chatUsers = await getChatUser(chatId)
+    const chatUsers = await db.getChatUser(chatId)
     
     const personajesEnVenta = []
     
     for (const user of chatUsers) {
       if (user.personajesEnVenta && user.personajesEnVenta.length > 0) {
-        const vendedorInfo = await getUser(user.user_id)
+        const vendedorInfo = await db.getUser(user.user_id)
         
         user.personajesEnVenta.forEach(p => {
           personajesEnVenta.push({

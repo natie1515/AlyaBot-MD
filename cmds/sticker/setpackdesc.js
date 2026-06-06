@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setstickerpackdesc', 'setpackdesc', 'packdesc'],
   category: 'stickers',
@@ -20,7 +20,7 @@ export default {
       if (desc.length > 60) {
         return msg.reply('《✧》La descripción no puede tener más de 60 caracteres.')
       }
-      const stickerPackData = await getStickersPack(msg.sender)
+      const stickerPackData = await db.getStickersPack(msg.sender)
       const packs = stickerPackData.packs || []
       if (!packs || packs.length === 0) {
         return msg.reply('《✧》No tienes paquetes creados.')
@@ -31,7 +31,7 @@ export default {
       }
       pack.desc = desc
       pack.lastModified = Date.now().toString()
-      await updateStickersPack(msg.sender, 'packs', packs)      
+      await db.updateStickersPack(msg.sender, 'packs', packs)      
       msg.reply(`❀ La descripción del paquete de stickers \`${pack.name}\` ha sido actualizada!`)
     } catch (e) {
       msg.reply(msgglobal)

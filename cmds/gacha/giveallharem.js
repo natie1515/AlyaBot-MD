@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['giveallharem'],
@@ -7,7 +7,7 @@ export default {
     const chatId = msg.chat
     const senderId = msg.sender
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -18,15 +18,15 @@ export default {
     if (!mentionedJid || mentionedJid === senderId)
       return msg.reply('《✤》 Menciona al usuario al que deseas regalar todos tus personajes.')
 
-    const fromUser = await getChatUser(chatId, senderId)
+    const fromUser = await db.getChatUser(chatId, senderId)
 
     if (!fromUser?.characters?.length)
       return msg.reply('✧ No tienes personajes en tu inventario.')
 
-    let toUser = await getChatUser(chatId, mentionedJid)
+    let toUser = await db.getChatUser(chatId, mentionedJid)
     
     if (!toUser) {
-      toUser = await getChatUser(chatId, mentionedJid)
+      toUser = await db.getChatUser(chatId, mentionedJid)
     }
 
     const charactersToTransfer = [...fromUser.characters]
@@ -36,12 +36,12 @@ export default {
       toUser.characters.push(char)
     }
 
-    await updateChatUser(chatId, mentionedJid, 'characters', toUser.characters)
+    await db.updateChatUser(chatId, mentionedJid, 'characters', toUser.characters)
 
     fromUser.characters = []
-    await updateChatUser(chatId, senderId, 'characters', fromUser.characters)
+    await db.updateChatUser(chatId, senderId, 'characters', fromUser.characters)
 
-    const globalReceiver = await getUser(mentionedJid)
+    const globalReceiver = await db.getUser(mentionedJid)
     const nameReceiver = globalReceiver?.name || mentionedJid.split('@')[0]
     
     const message = `✐ Regalaste todos tus personajes al usuario *${nameReceiver}*.`

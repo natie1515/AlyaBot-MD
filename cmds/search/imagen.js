@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fetch from 'node-fetch';
 
 export default {
@@ -45,7 +45,7 @@ const bannedWords = [
   'mia khalifa +18', 'mia khalifa xxx', 'mia khalifa desnuda', 'mia khalifa porno'
 ]
     const lowerText = text.toLowerCase()
-    const nsfwEnabled = await getChat(msg.chat).nsfw === 1
+    const nsfwEnabled = await db.getChat(msg.chat).nsfw === 1
 
     if (!nsfwEnabled && bannedWords.some((word) => lowerText.includes(word))) {
       return msg.reply('✤ Este comando no permite búsquedas de contenido +18 o NSFW')

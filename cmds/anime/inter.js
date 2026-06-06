@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fetch from 'node-fetch';
 
 const captions = {
@@ -289,11 +289,11 @@ export default {
       who = msg.quoted ? msg.quoted.sender : msg.sender
     }
 
-     const user = await getUser(who)
+     const user = await db.getUser(who)
     const fromName = msg.pushName || 'Alguien'
     const toName = user.name || 'alguien'
 
-    const usr = await getUser(msg.sender)
+    const usr = await db.getUser(msg.sender)
     const genero = usr.genre || 'Oculto'
 
     const captionText = captions[currentCommand](fromName, toName, genero)

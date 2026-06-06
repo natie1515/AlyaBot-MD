@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import moment from 'moment-timezone';
 
 export default {
@@ -8,24 +8,24 @@ export default {
     const texto = msg.mentionedJid
     const userId = texto.length > 0 ? texto[0] : msg.quoted ? msg.quoted.sender : msg.sender
 
-    const chat = await getChat(msg.chat)
-    const chatUsers = await getChatUser(msg.chat, userId)
-    const globalUsers = await getUser(userId)
-   const userss = await getChatUser(msg.chat, userId)
+    const chat = await db.getChat(msg.chat)
+    const chatUsers = await db.getChatUser(msg.chat, userId)
+    const globalUsers = await db.getUser(userId)
+   const userss = await db.getChatUser(msg.chat, userId)
 
     if (!userss) {
       return msg.reply('✐ El usuario *mencionado* no está *registrado* en el bot')
     }
 
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net' || ''
-    const settings = await getSettings(idBot)
+    const settings = await db.getSettings(idBot)
     const currency = settings.currency || ''
 
     const user = chatUsers || {}
     const user2 = globalUsers || {}
 
-    const globalUsers2 = await getUser(user2.marry)
-    const globalUsers3 = await getUser()
+    const globalUsers2 = await db.getUser(user2.marry)
+    const globalUsers3 = await db.getUser()
 
     const name = user2.name || ''
     const birth = user2.birth || 'Sin especificar'

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fetch from 'node-fetch';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   category: 'search',
   run: async ({ msg, sock, args }) => {
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const banner = botSettings.icon
 
     if (!args || !args.length) {

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setpackprivate', 'setpackpriv', 'packprivate'],
   category: 'stickers',
@@ -8,7 +8,7 @@ export default {
         return msg.reply('《✧》Debes especificar el nombre del paquete de stickers.')
       }
       const packName = args.join(' ').trim()
-      const stickerPackData = await getStickersPack(msg.sender)
+      const stickerPackData = await db.getStickersPack(msg.sender)
       const packs = stickerPackData.packs || []
       if (!packs || packs.length === 0) {
         return msg.reply('《✧》No tienes paquetes creados.')
@@ -22,7 +22,7 @@ export default {
       }
       pack.spackpublic = 0
       pack.lastModified = Date.now().toString()
-      await updateStickersPack(msg.sender, 'packs', packs)      
+      await db.updateStickersPack(msg.sender, 'packs', packs)      
       msg.reply(`❀ El paquete de stickers \`${pack.name}\` ha sido establecido como privado!`)
     } catch (e) {
       msg.reply(msgglobal)

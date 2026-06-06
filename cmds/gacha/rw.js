@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import fetch from 'node-fetch';
@@ -51,9 +51,9 @@ export default {
   run: async ({ msg, sock, args }) => {
     const chatId = msg.chat
     const userId = msg.sender
-    const chat = await getChat(chatId)
-    const user = await getUser(userId)
-    const chatUser = await getChatUser(chatId, userId)
+    const chat = await db.getChat(chatId)
+    const user = await db.getUser(userId)
+    const chatUser = await db.getChatUser(chatId, userId)
     const now = Date.now()
 
     if (chat.adminonly || !chat.gacha)
@@ -73,7 +73,7 @@ export default {
       ? chat.personajesReservados.find((p) => p.name === personaje.name)
       : null
 
-    const chatUsers = await getChatUser(chatId)
+    const chatUsers = await db.getChatUser(chatId)
     const poseedor = chatUsers.find(user =>
       Array.isArray(user.characters) && user.characters.some((c) => c.name === personaje.name)
     )
@@ -81,14 +81,14 @@ export default {
     try {
       let estado = 'Libre'
       if (poseedor) {
-        const userData = await getUser(poseedor.user_id)
+        const userData = await db.getUser(poseedor.user_id)
         estado = `Reclamado por ${userData.name || 'Alguien'}`
       } else if (reservado) {
-        const userData = await getUser(reservado.userId)
+        const userData = await db.getUser(reservado.userId)
         estado = `Reservado por ${userData.name || 'Alguien'}`
       }
 
-      await updateChatUser(chatId, userId, 'rwCooldown', now + 15 * 60000)
+      await db.updateChatUser(chatId, userId, 'rwCooldown', now + 15 * 60000)
 
       const valorPersonaje =
         typeof personaje.value === 'number' ? personaje.value.toLocaleString() : '0'
@@ -141,10 +141,10 @@ const sent = await sock.sendMessage(chatId, payload, { quoted: msg });
           personajesReservados.push(nuevoReservado)
         }
         
-        await updateChat(chatId, 'personajesReservados', personajesReservados)
+        await db.updateChat(chatId, 'personajesReservados', personajesReservados)
       }
     } catch (e) {
-      await updateChatUser(chatId, userId, 'rwCooldown', 0)
+      await db.updateChatUser(chatId, userId, 'rwCooldown', 0)
       return msg.reply(msgglobal)
     }
   },

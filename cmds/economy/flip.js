@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['cf', 'flip', 'coinflip'],
   category: 'rpg',
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat)
-    const user = await getChatUser(msg.chat, msg.sender)
+    const chat = await db.getChat(msg.chat)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
 
     if (chat.adminonly || !chat.rpg)
@@ -44,12 +44,12 @@ export default {
     if (resultado === eleccion) {
       user.coins += cantidad
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       mensaje += `¡Has ganado *¥${cantidadFormatted} ${monedas}*!`
     } else {
       user.coins -= cantidad
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       mensaje += `Has perdido *¥${cantidadFormatted} ${monedas}*.`
     }
 

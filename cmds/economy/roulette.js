@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 const msToTime = (duration) => {
   const seconds = Math.floor((duration / 1000) % 60)
   const minutes = Math.floor((duration / (1000 * 60)) % 60)
@@ -24,13 +24,13 @@ export default {
     const chatId = msg.chat
     const senderId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
-    const chatData = await getChat(msg.chat)
+    const botSettings = await db.getSettings(botId)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const cooldown = 5 * 60 * 1000
     const now = Date.now()
     const remaining = (user.rtCooldown || 0) - now
@@ -56,7 +56,7 @@ export default {
       return msg.reply(`✎ No tienes suficientes *${currency}* para hacer esta apuesta.`)
 
     user.rtCooldown = now + cooldown
-    await updateChatUser(msg.chat, msg.sender, 'rtCooldown', user.rtCooldown)
+    await db.updateChatUser(msg.chat, msg.sender, 'rtCooldown', user.rtCooldown)
 
     const colorSettings = {
       red:    { weight: 45 },
@@ -71,7 +71,7 @@ export default {
       const multiplier = Math.floor(Math.random() * 2) + 2
       const reward = amount * multiplier
       user.coins += reward
-      await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+      await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       await sock.reply(
         chatId,
         `ꕥ La ruleta salió en *${resultColor}* y has ganado *¥${reward.toLocaleString()} ${currency}*.`,
@@ -80,7 +80,7 @@ export default {
       )
     } else {
       user.coins -= amount
-      await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+      await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       await sock.reply(
         chatId,
         `✎ La ruleta salió en *${resultColor}* y has perdido *¥${amount.toLocaleString()} ${currency}*.`,

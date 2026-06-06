@@ -1,17 +1,17 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['ritual'],
   category: 'rpg',
    run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const botId = sock?.user?.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings?.currency || 'Coins'
 
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     if (chat.adminonly || !chat.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
 
     const remaining = user.ritualCooldown - Date.now()
     if (remaining > 0) {
@@ -20,7 +20,7 @@ export default {
     
     user.ritualCooldown = Date.now() + 15 * 60000
 
-   await updateChatUser(msg.chat, msg.sender, 'ritualCooldown', user.ritualCooldown)
+   await db.updateChatUser(msg.chat, msg.sender, 'ritualCooldown', user.ritualCooldown)
 
     const roll = Math.random()
     let reward = 0
@@ -51,7 +51,7 @@ export default {
 
     user.coins += reward
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
 
     let msg2 = `${narration}\nGanaste *${reward.toLocaleString()} ${monedas}*`
     if (bonusMsg) msg2 += `\n${bonusMsg}`

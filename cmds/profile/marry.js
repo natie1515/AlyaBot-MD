@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 let proposals = {}
 
@@ -15,14 +15,14 @@ export default {
     if (proposer === proposee)
       return msg.reply('「✿」 No puedes proponerte matrimonio a ti mismo.')
 
-    const proposerData = await getUser(proposer)
-    const proposeeData = await getUser(proposee)
+    const proposerData = await db.getUser(proposer)
+    const proposeeData = await db.getUser(proposee)
 
     if (proposerData?.marry)
-      return msg.reply(`✐ Ya estás casado con *${getUser(proposerData.marry)?.name || 'alguien'}*.`)
+      return msg.reply(`✐ Ya estás casado con *${db.getUser(proposerData.marry)?.name || 'alguien'}*.`)
 
     if (proposeeData?.marry)
-      return msg.reply(`✎ *${proposeeData.name || proposee.split('@')[0]}* ya está casado con *${getUser(proposeeData.marry)?.name || 'alguien'}*.`)
+      return msg.reply(`✎ *${proposeeData.name || proposee.split('@')[0]}* ya está casado con *${db.getUser(proposeeData.marry)?.name || 'alguien'}*.`)
 
     setTimeout(() => {
       delete proposals[proposer]
@@ -34,8 +34,8 @@ export default {
       proposerData.marry = proposee
       proposeeData.marry = proposer
 
-      await updateUser(msg.sender, 'marry', proposerData.marry)
-      await updateUser(proposee, 'marry', proposeeData.marry)
+      await db.updateUser(msg.sender, 'marry', proposerData.marry)
+      await db.updateUser(proposee, 'marry', proposeeData.marry)
      return msg.reply(`✐ Felicidades, *${proposerData.name || proposer.split('@')[0]}* y *${proposeeData.name || proposee.split('@')[0]}* ahora están casados.`)
     } else {
       proposals[proposer] = proposee

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { prepareWAMessageMedia } from 'baileys';
 import os from 'os';
 
@@ -20,7 +20,7 @@ export default {
   category: 'info',
   run: async ({ msg, sock }) => {
     const botId = sock.user.id.split(':')[0] + "@s.whatsapp.net"
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
 
     const botname = botSettings.namebot || 'Ai Surus'
     const botname2 = botSettings.namebot2 || 'Surus'
@@ -35,7 +35,7 @@ export default {
 
     let desar = 'Oculto'
     if (owner && !isNaN(owner.replace(/@s\.whatsapp\.net$/, ''))) {
-      const userData = await getUser(owner)
+      const userData = await db.getUser(owner)
       desar = userData?.genre || 'Oculto'
     }
 

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 
@@ -51,7 +51,7 @@ export default {
   run: async ({ msg, sock, args }) => {
     const chatId = msg.chat
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)

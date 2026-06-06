@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 const findCharacterByName = (name, characters) => {
   return characters.find((p) => p.name?.toLowerCase() === name.toLowerCase())
 }
@@ -10,7 +10,7 @@ export default {
     const chatId = msg.chat
     const userId = msg.sender
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -31,10 +31,10 @@ export default {
     try {
       const [personaje1Nombre, personaje2Nombre] = partes
       
-      const userData = await getChatUser(chatId, userId)
+      const userData = await db.getChatUser(chatId, userId)
       const personaje1 = findCharacterByName(personaje1Nombre, userData.characters || [])
 
-      const chatUsers = await getChatUser(chatId)
+      const chatUsers = await db.getChatUser(chatId)
       
       let personaje2UserId = null
       let personaje2 = null
@@ -73,8 +73,8 @@ export default {
         expiracion: Date.now() + 60000,
       })
 
-      await updateChat(chatId, 'intercambios', intercambios)
-      await updateChat(chatId, 'timeTrade', Date.now() + 60000)
+      await db.updateChat(chatId, 'intercambios', intercambios)
+      await db.updateChat(chatId, 'timeTrade', Date.now() + 60000)
 
       const solicitudMessage = `✐ @${personaje2UserId.split('@')[0]}, @${userId.split('@')[0]} te ha enviado una solicitud de intercambio
 

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url'
@@ -27,7 +27,7 @@ export default {
 
   run: async ({ msg, sock, args }) => {
     try {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
       const mentioned = msg.mentionedJid
       const who = mentioned.length > 0 ? mentioned[0] : msg.quoted?.sender || false
       if (!who) {
@@ -55,7 +55,7 @@ export default {
 
       chat.primaryBot = who
 
-   await updateChat(msg.chat, 'primaryBot', chat.primaryBot)
+   await db.updateChat(msg.chat, 'primaryBot', chat.primaryBot)
       await sock.reply(
         msg.chat,
         `✐ Se ha establecido a @${who.split('@')[0]} como bot primario de este grupo.\n> Ahora todos los comandos de este grupo serán ejecutados por @${who.split('@')[0]}.`,

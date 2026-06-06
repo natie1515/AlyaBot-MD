@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 function getLastActive(usedTime) {
   if (!usedTime) return 0;
   if (typeof usedTime === 'number') return usedTime;
@@ -23,7 +23,7 @@ function msToTime(ms) {
 
 async function deleteUser(userId) {
   try {
-    const result = await deletedb('user', userId);
+    const result = await db.deletedb('user', userId);
     return result;
   } catch (e) {
     return false;
@@ -32,7 +32,7 @@ async function deleteUser(userId) {
 
 async function deleteChatUser(chatId, userId) {
   try {
-    const result = await deletedb('chatuser', chatId, userId);
+    const result = await db.deletedb('chatuser', chatId, userId);
     return result;
   } catch (e) {
     return false;
@@ -43,7 +43,7 @@ export default {
   command: ['clear'],
   category: 'grupo',
   run: async ({ msg, sock, command, args }) => {
-    const chatData = await getChat(msg.chat);
+    const chatData = await db.getChat(msg.chat);
     if (!chatData) return msg.reply('ꕥ No se encontraron datos del grupo');
 
     const metadata = await sock.groupMetadata(msg.chat);
@@ -66,7 +66,7 @@ export default {
       let count = 0;
       let deletedUsers = [];
 
-      const chatUsers = await getChatUser(msg.chat);
+      const chatUsers = await db.getChatUser(msg.chat);
       
       for (const user of chatUsers) {
         const jid = user.user_id;
@@ -77,7 +77,7 @@ export default {
         const isInactive = isValidTime && inactiveTime > THIRTY_DAYS_MS;
 
         if (isViewMode && isValidTime) {
-          const userData = await getUser(jid);
+          const userData = await db.getUser(jid);
           const displayName = userData?.name || jid.split('@')[0];
           const waifus = user.characters?.length || 0;
           const dinero = user.coins || 0;
@@ -88,7 +88,7 @@ export default {
           totalWaifus += waifus;
           totalDinero += dinero;
         } else if (isInactive) {
-          const userData = await getUser(jid);
+          const userData = await db.getUser(jid);
           const displayName = userData?.name || jid.split('@')[0];
           const waifus = user.characters?.length || 0;
           const dinero = user.coins || 0;
@@ -124,7 +124,7 @@ export default {
         }
       }
 
-      const botSettings = await getSettings('bot');
+      const botSettings = await db.getSettings('bot');
       const currency = botSettings?.currency || '¥enes';
       let details = '';
 
@@ -161,7 +161,7 @@ export default {
         details += '\n\n*✿ Usuarios eliminados completamente (●´ϖ`●):*\n';
         for (let i = 0; i < Math.min(10, deletedUsers.length); i++) {
           const jid = deletedUsers[i];
-          const userData = await getUser(jid);
+          const userData = await db.getUser(jid);
           const name = userData?.name || jid.split('@')[0];
           details += `${i + 1}. *${name}* (${jid})\n`;
         }

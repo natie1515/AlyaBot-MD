@@ -1,10 +1,10 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['leave'],
   category: 'socket',
   run: async ({ msg, sock, args }) => {
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const settings = await getSettings(botId)
+    const settings = await db.getSettings(botId)
     const owner = settings.owner
     const isSocketOwner = [
       botId,

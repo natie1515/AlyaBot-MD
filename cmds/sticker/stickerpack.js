@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import axios from 'axios';
 import sharp from 'sharp';
 
@@ -57,7 +57,7 @@ export default {
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     try {
       if (!text) return sock.reply(msg.chat, `《✧》 Ingresa un texto para buscar packs de stickers o una URL de sticker.ly.`, msg);
-      const name = await getUser(msg.sender).name || msg.sender.split('@')[0];
+      const name = await db.getUser(msg.sender).name || msg.sender.split('@')[0];
       let packData;
       const stickerMatch = text.match(/(?:sticker\.ly\/s\/)([a-zA-Z0-9]+)(?:\s|$)/);
       const url = stickerMatch ? 'https://sticker.ly/s/' + stickerMatch[1] : (isStickerUrl(text) ? text : null);

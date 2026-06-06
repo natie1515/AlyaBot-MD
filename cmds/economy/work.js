@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['w', 'work'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat)
-    const user = await getChatUser(msg.chat, msg.sender)
+    const chat = await db.getChat(msg.chat)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency;
 
     if (chat.adminonly || !chat.rpg)
@@ -23,8 +23,8 @@ export default {
     user.workCooldown = Date.now() + 10 * 60 * 1000; // 10 minutos
     user.coins += rsl;
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-   await updateChatUser(msg.chat, msg.sender, 'workCooldown', user.workCooldown)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'workCooldown', user.workCooldown)
 
         await sock.reply(msg.chat, `「✿」 ${pickRandom(trabajo)} *¥${rsl.toLocaleString()} ${monedas}*.`, msg)
   }

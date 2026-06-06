@@ -1,11 +1,11 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setwelcome'],
   category: 'grupo',
   isAdmin: true,
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat;
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
 
     if (!args.length) {
       return msg.reply(`ꕤ ꨩᰰ𑪐𑂺 ˳ ׄ Set Welcome ࣭𑁯ᰍ   ̊ ܃܃
@@ -36,7 +36,7 @@ ${prefix + command} 0`);
       }
       chat.welcomeMessage = '';
 
-   await updateChat(msg.chat, 'welcomeMessage', chat.welcomeMessage)
+   await db.updateChat(msg.chat, 'welcomeMessage', chat.welcomeMessage)
       return msg.reply('✐ Mensaje de bienvenida eliminado.');
     }
 
@@ -47,7 +47,7 @@ ${prefix + command} 0`);
     const texto = args.join(' ');
     chat.welcomeMessage = texto;
 
-   await updateChat(msg.chat, 'welcomeMessage', chat.welcomeMessage)
+   await db.updateChat(msg.chat, 'welcomeMessage', chat.welcomeMessage)
     msg.reply(`✐ Nuevo mensaje de bienvenida configurado correctamente.`);
   }
 };

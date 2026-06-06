@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { promises as fs } from 'fs';
 
 const charactersFilePath = './lib/characters.json';
@@ -37,7 +37,7 @@ export default {
   use: '<nombre del personaje>',
   run: async ({ msg, sock, args }) => {
     const chatId = msg.chat;
-    const chatData = await getChat(chatId);
+    const chatData = await db.getChat(chatId);
     
     if (chatData.adminonly || !chatData.gacha)
       return msg.reply(mess.comandooff);
@@ -61,7 +61,7 @@ export default {
     let usuarioPoseedor = null;
     let characterInstance = null;
     
-    const chatUsers = await getChatUser(chatId);
+    const chatUsers = await db.getChatUser(chatId);
     
     for (const user of chatUsers) {
       if (user.characters && Array.isArray(user.characters)) {
@@ -76,7 +76,7 @@ export default {
 
     let ownerName = 'Usuario desconocido';
     if (usuarioPoseedor) {
-      const userData = await getUser(usuarioPoseedor);
+      const userData = await db.getUser(usuarioPoseedor);
       ownerName = userData.name || usuarioPoseedor.split('@')[0];
     }
 
@@ -87,7 +87,7 @@ export default {
       estado = `*Reclamado por ${ownerName}*\n𖹭  ׄ  ְ ✿ Fecha de reclamo › *${claimStatus}*`;
     } else if (reservado) {
       let reservadoName = 'Usuario desconocido';
-      const reservadoUser = await getUser(reservado.userId);
+      const reservadoUser = await db.getUser(reservado.userId);
       reservadoName = reservadoUser.name || reservado.userId.split('@')[0];
       estado = `*Reservado por ${reservadoName}*`;
     }

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import makeWASocket, { Browsers, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, DisconnectReason, jidDecode, useMultiFileAuthState } from 'baileys';
 import NodeCache from 'node-cache';
 import handler from '#handler';
@@ -233,7 +233,7 @@ export default {
   command: ['code', 'qr'],
   category: 'socket',
   run: async ({ msg, sock: client, args, command }) => {
-    let user = await getUser(msg.sender);
+    let user = await db.getUser(msg.sender);
     let time = user.Subs + 120000 || '';
     
     if (new Date() - user.Subs < 120000) {
@@ -276,7 +276,7 @@ export default {
     await startSubBot(msg, client, caption, isCode, phone, msg.chat, isCommand);
     user.Subs = new Date() * 1;
 
-    await updateUser(msg.sender, 'Subs', user.Subs);
+    await db.updateUser(msg.sender, 'Subs', user.Subs);
   }
 };
 

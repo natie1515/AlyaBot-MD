@@ -1,9 +1,9 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setpasatiempo', 'sethobby'],
   category: 'profile',
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const user = await getUser(msg.sender)
+    const user = await db.getUser(msg.sender)
     const input = args.join(' ').trim()
 
     const pasatiemposDisponibles = [
@@ -63,7 +63,7 @@ export default {
 
     user.pasatiempo = pasatiempoSeleccionado
 
-await updateUser(msg.sender, 'pasatiempo', user.pasatiempo)
+await db.updateUser(msg.sender, 'pasatiempo', user.pasatiempo)
 
     return msg.reply(`✐ Se ha establecido tu pasatiempo:\n> *${user.pasatiempo}*`)
   },

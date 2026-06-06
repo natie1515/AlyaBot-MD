@@ -1,15 +1,15 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { delay } from "baileys"
 
 export default {
   command: ['slot'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const bot = await getSettings(botId)
+    const bot = await db.getSettings(botId)
     const currency = bot.currency
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
 
     if (chat.adminonly || !chat.rpg)
       return msg.reply(mess.comandooff)
@@ -30,8 +30,8 @@ export default {
       if (user.bank >= apuesta) {
         user.bank -= apuesta
         user.coins += apuesta
-        await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
-        await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+        await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+        await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       } else {
         return msg.reply(`「✿」 No tienes suficientes *${currency}* ni en tu banco.`)
       }
@@ -68,24 +68,24 @@ ${x[2]} : ${y[2]} : ${z[2]}
     if (x[0] === y[0] && y[0] === z[0]) {
       resultado = `「✿」 Ganaste! *¥${(apuesta * 2).toLocaleString()} ${currency}*.`
       user.coins += apuesta
-      await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+      await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
     } else if (x[0] === y[0] || x[0] === z[0] || y[0] === z[0]) {
       resultado = `「✎」 Casi lo logras. *Toma ¥10 ${currency}* por intentarlo.`
       user.coins += 10
-      await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+      await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
     } else {
       resultado = `「✿」 Perdiste *¥${apuesta.toLocaleString()} ${currency}*.`
       if (user.coins >= apuesta) {
         user.coins -= apuesta
-        await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+        await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       } else {
         user.bank -= apuesta
-        await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+        await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
       }
     }
 
     user.lastslot = Date.now() + 10 * 60 * 1000
-    await updateChatUser(msg.chat, msg.sender, 'lastslot', user.lastslot)
+    await db.updateChatUser(msg.chat, msg.sender, 'lastslot', user.lastslot)
 
     const finalText = `ꕤ | *SLOTS* 
 ────────

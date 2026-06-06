@@ -1,11 +1,11 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setwarnlimit'],
   category: 'group',
   isAdmin: true,
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     try {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     const raw = args[0]
     const limit = parseInt(raw)
 
@@ -23,8 +23,8 @@ export default {
       chat.warnLimit = 0
       chat.expulsar = 0
 
-   await updateChat(msg.chat, 'warnLimit', chat.warnLimit)
-   await updateChat(msg.chat, 'expulsar', chat.expulsar)
+   await db.updateChat(msg.chat, 'warnLimit', chat.warnLimit)
+   await db.updateChat(msg.chat, 'expulsar', chat.expulsar)
       return msg.reply(
         `《✤》 Has desactivado la función de eliminar usuarios al alcanzar el límite de advertencias.`
       )
@@ -33,8 +33,8 @@ export default {
     chat.warnLimit = limit
     chat.expulsar = 1
 
-   await updateChat(msg.chat, 'warnLimit', chat.warnLimit)
-   await updateChat(msg.chat, 'expulsar', chat.expulsar)
+   await db.updateChat(msg.chat, 'warnLimit', chat.warnLimit)
+   await db.updateChat(msg.chat, 'expulsar', chat.expulsar)
 
     await msg.reply(
       `✐ Límite de advertencias establecido en \`${limit}\` para este grupo.\n` +

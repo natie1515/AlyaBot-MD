@@ -1,9 +1,9 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setbirth'],
   category: 'profile',
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const user = await getUser(msg.sender)
+    const user = await db.getUser(msg.sender)
     const currentYear = new Date().getFullYear()
     const input = args.join(' ')
 
@@ -24,7 +24,7 @@ export default {
 
     user.birth = birth
 
-    await updateUser(msg.sender, 'birth', user.birth)
+    await db.updateUser(msg.sender, 'birth', user.birth)
     return msg.reply(`✎ Se ha establecido tu fecha de nacimiento como: *${user.birth}*`)
   },
 };

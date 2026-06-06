@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['daily'],
   category: 'rpg',
   run: async ({ msg, sock }) => {
-    const chat = await getChat(msg.chat)
-    const user = await getChatUser(msg.chat, msg.sender)
+    const chat = await db.getChat(msg.chat)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
 
     const now = Date.now()
@@ -31,14 +31,14 @@ export default {
   user.dailyStreak = 1
   user.lastDaily = now
 
-   await updateChatUser(msg.chat, msg.sender, 'dailyStreak', user.dailyStreak)
-   await updateChatUser(msg.chat, msg.sender, 'lastDaily', user.lastDaily)
+   await db.updateChatUser(msg.chat, msg.sender, 'dailyStreak', user.dailyStreak)
+   await db.updateChatUser(msg.chat, msg.sender, 'lastDaily', user.lastDaily)
 
   const recompensa = calcularRecompensa(user.dailyStreak)
   const siguiente = calcularRecompensa(user.dailyStreak + 1)
   user.coins += recompensa
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
 
     return sock.reply(msg.chat, `「✿」 Has reclamado tu recompensa diaria de *${recompensa.toLocaleString()} ${monedas}*! (Día *1*)\n` +
     `> Día *2* » *¥${siguiente.toLocaleString()}*` +
@@ -48,14 +48,14 @@ export default {
     user.dailyStreak += 1
     user.lastDaily = now
 
-   await updateChatUser(msg.chat, msg.sender, 'dailyStreak', user.dailyStreak)
-   await updateChatUser(msg.chat, msg.sender, 'lastDaily', user.lastDaily)
+   await db.updateChatUser(msg.chat, msg.sender, 'dailyStreak', user.dailyStreak)
+   await db.updateChatUser(msg.chat, msg.sender, 'lastDaily', user.lastDaily)
 
     const recompensa = calcularRecompensa(user.dailyStreak)
     const siguiente = calcularRecompensa(user.dailyStreak + 1)
     user.coins += recompensa
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
 
     const rachaExtra = user.dailyStreak >= 10
       ? `\n> ☆ ¡Racha de *${user.dailyStreak}* días, ¡Sigue así!`

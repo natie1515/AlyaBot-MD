@@ -1,18 +1,18 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['delwarn'],
   category: 'group',
   isAdmin: true,
   run: async ({ msg, sock, args }) => {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     const mentioned = msg.mentionedJid || []
     const targetId = mentioned.length > 0 ? mentioned[0] : (msg.quoted ? msg.quoted.sender : false)
 
     if (!targetId) return msg.reply('《✤》 Debes mencionar o responder al usuario cuya advertencia deseas eliminar.')
 
-    const user = await getChatUser(msg.chat, targetId)
-    const nam = await getUser(targetId)
+    const user = await db.getChatUser(msg.chat, targetId)
+    const nam = await db.getUser(targetId)
     if (!user) return msg.reply('✎ No se encontró al usuario en la base de datos.')
 
     const total = user?.warnings?.length || 0
@@ -31,7 +31,7 @@ export default {
 
     if (rawIndex?.toLowerCase() === 'all') {
     //  user.warnings = []
-      await updateChatUser(msg.chat, targetId, 'warnings', '[]')
+      await db.updateChatUser(msg.chat, targetId, 'warnings', '[]')
       return sock.reply(
         msg.chat,
         `✎ Se han eliminado todas las advertencias del usuario @${targetId.split('@')[0]} (${name}).`,
@@ -51,7 +51,7 @@ export default {
 
     const realIndex = total - index
    // user.warnings.splice(realIndex, 1)
-    await updateChatUser(msg.chat, targetId, 'warnings', user.warnings.splice(realIndex, 1))
+    await db.updateChatUser(msg.chat, targetId, 'warnings', user.warnings.splice(realIndex, 1))
 
     await sock.reply(
       msg.chat,

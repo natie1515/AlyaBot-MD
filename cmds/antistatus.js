@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export async function before({ msg, sock, groupMetadata, participants, isAdmins, isBotAdmins }) {
   if (!msg.isGroup) return;
@@ -7,11 +7,11 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
   const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
   if (!groupMetadata) return;
   
-  const botSettings = await getSettings(botId);
+  const botSettings = await db.getSettings(botId);
   const isSelf = botSettings?.self ?? 0;
   if (isSelf) return;
   
-  const chat = await getChat(msg.chat);
+  const chat = await db.getChat(msg.chat);
   const primaryBotId = chat?.primaryBot;
   const isPrimary = !primaryBotId || primaryBotId === botId;
   
@@ -54,7 +54,7 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
 
     const targetId = msg.sender;
     
-    let user = await getChatUser(msg.chat, targetId);
+    let user = await db.getChatUser(msg.chat, targetId);
     if (!user) {
         user = { warnings: [] }; 
     }
@@ -81,7 +81,7 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
     
    // user.warnings = warnings;
     
-    await updateChatUser(msg.chat, targetId, 'warnings', warnings);
+    await db.updateChatUser(msg.chat, targetId, 'warnings', warnings);
    
     const total = warnings.length;
     const warnLimit = chat.warnLimit || 3;
@@ -98,7 +98,7 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
       try {
         await sock.groupParticipantsUpdate(msg.chat, [targetId], 'remove');
        // user.warnings = [];
-        await updateChatUser(msg.chat, targetId, 'warnings', []);
+        await db.updateChatUser(msg.chat, targetId, 'warnings', []);
         message += `\n\n> ❖ El usuario alcanzó el límite de advertencias y fue expulsado del grupo.`;
       } catch {
         message += `\n\n> ❖ El usuario alcanzó el límite, pero no se pudo expulsar automáticamente.`;

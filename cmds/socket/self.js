@@ -1,10 +1,10 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['self'],
   category: 'socket',
   run: async ({ msg, sock, args }) => {
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const config = await getSettings(idBot)
+    const config = await db.getSettings(idBot)
    const owner = config.owner ? config.owner : '' || ''
     const isOwner2 = [
       idBot,
@@ -20,7 +20,7 @@ export default {
       if (estado) return msg.reply('✿ El modo *Self* ya estaba activado.')
       chat.self = 1
 
-      await updateSettings(idBot, 'self', chat.self)
+      await db.updateSettings(idBot, 'self', chat.self)
       return msg.reply('✿ Has *Activado* el modo *Self*.')
     }
 
@@ -28,7 +28,7 @@ export default {
       if (!estado) return msg.reply('✿ El modo *Self* ya estaba desactivado.')
       chat.self = 0
 
-      await updateSettings(idBot, 'self', chat.self)
+      await db.updateSettings(idBot, 'self', chat.self)
       return msg.reply('✿ Has *Desactivado* el modo *Privado*.')
     }
 

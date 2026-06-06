@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['gachainfo', 'ginfo', 'infogacha'],
   category: 'gacha',
@@ -6,13 +6,13 @@ export default {
     const chatId = msg.chat
     const userId = msg.sender
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(chatId, userId)
-    const globalUser = await getUser(userId)
+    const user = await db.getChatUser(chatId, userId)
+    const globalUser = await db.getUser(userId)
     
     const now = Date.now()
 

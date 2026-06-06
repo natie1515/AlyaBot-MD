@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 const msToTime = (duration) => {
   const seconds = Math.floor((duration / 1000) % 60)
   const minutes = Math.floor((duration / (1000 * 60)) % 60)
@@ -15,13 +15,13 @@ export default {
     const chatId = msg.chat
     const senderId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
-    const chatData = await getChat(msg.chat)
+    const botSettings = await db.getSettings(botId)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const cooldown = 10 * 60 * 1000
     const now = Date.now()
     const remaining = (user.slutCooldown || 0) - now
@@ -34,7 +34,7 @@ export default {
     const amount = Math.floor(Math.random() * 5000)    
     user.slutCooldown = now + cooldown
 
-   await updateChatUser(msg.chat, msg.sender, 'slutCooldown', user.slutCooldown)
+   await db.updateChatUser(msg.chat, msg.sender, 'slutCooldown', user.slutCooldown)
 
     const winMessages = [
       `Organizaron una fiesta temática y ganaste *¥${amount.toLocaleString()} ${currency}*!`,
@@ -61,27 +61,27 @@ export default {
     if (success) {
       user.coins = (user.coins || 0) + amount
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
     } else {
       const total = (user.coins || 0) + (user.bank || 0)
       if (total >= amount) {
         if (user.coins >= amount) {
           user.coins -= amount
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
         } else {
           const remainingLoss = amount - user.coins
           user.coins = 0
           user.bank -= remainingLoss
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.bank)
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
         }
       } else {
         user.coins = 0
         user.bank = 0
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.bank)
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
       }
     }
 

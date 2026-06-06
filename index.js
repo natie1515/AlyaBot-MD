@@ -141,7 +141,7 @@ function askConnectionMethod() {
 
 async function warmupGroups(sock) {
   try {
-    const allChats = Object.values(database.getChat());
+    const allChats = Object.values(database.db.db.getChat());
     const chatIds = allChats.map(c => c.id).filter(id => typeof id === 'string' && id.endsWith('@g.us')).slice(0, 50)
     if (!chatIds.length) return;
     console.log(chalk.gray(`[ ✿ ] Precargando metadata de ${chatIds.length} grupos...`));
@@ -421,7 +421,7 @@ async function startBot(fallbackInfo = null) {
 
      if (global.sock && global.sock.user) {
          const ownerBotId = global.sock.user.id.split(':')[0] + '@s.whatsapp.net';
-         database.updateSettings(ownerBotId, 'type', isUsingFallback ? (fallbackInfo?.type || 'Owner') : 'Owner');
+         database.db.db.updateSettings(ownerBotId, 'type', isUsingFallback ? (fallbackInfo?.type || 'Owner') : 'Owner');
      }
 
      log.success(`Conectado exitosamente como: ${userName}`);

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs'
 import fetch from 'node-fetch'
 import exif from '../../lib/exif.js'
@@ -11,7 +11,7 @@ export default {
     try {
       const quoted = msg.quoted ? msg.quoted : msg
       const mime = (quoted.msg || quoted).mimetype || ''
-      let user = await getUser(msg.sender)
+      let user = await db.getUser(msg.sender)
       const name = user.name
       let texto1 = user.metadatos || `S'ᴛᴇʟʟᴀʀ 🧠 WᴀBᴏᴛ`
       let texto2 = user.metadatos2 || `@${name}`

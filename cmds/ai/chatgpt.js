@@ -1,4 +1,4 @@
-import { getSettings, deletedb, setCreate } from "#database"
+import db from "#db"
 import fetch from 'node-fetch';
 
 export default {

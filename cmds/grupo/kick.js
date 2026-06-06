@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['kick'],
@@ -89,7 +89,7 @@ export default {
     }
 
     if (args[0] === 'inactive' || args[0] === 'listinactive') {
-      const allChatUsers = await getChatUser(msg.chat);
+      const allChatUsers = await db.getChatUser(msg.chat);
       const now = new Date();
       let daysArg = 30;
       const cutoff = new Date(now.getTime() - daysArg * 24 * 60 * 60 * 1000);

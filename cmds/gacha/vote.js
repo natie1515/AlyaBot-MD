@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { promises as fs } from 'fs';
 
 const charactersFilePath = './lib/characters.json'
@@ -42,11 +42,11 @@ export default {
     const chatId = msg.chat
     const userId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const settings = await getSettings(botId)
+    const settings = await db.getSettings(botId)
 
-    const chatConfig = await getChat(chatId)
-    const user = await getUser(userId)
-    const chatUser = await getChatUser(chatId, userId)
+    const chatConfig = await db.getChat(chatId)
+    const user = await db.getUser(userId)
+    const chatUser = await db.getChatUser(chatId, userId)
 
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -89,7 +89,7 @@ export default {
 
       await saveCharacters(characters)
 
-      await updateChatUser(chatId, userId, 'voteCooldown', Date.now() + 90 * 60000)
+      await db.updateChatUser(chatId, userId, 'voteCooldown', Date.now() + 90 * 60000)
       characterVotes.set(characterName, Date.now() + cooldownTime)
 
       const message = `ꕥ Votaste por *${character.name}*

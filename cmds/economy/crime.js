@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['crime'],
   category: 'rpg',
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat)
-    const user = await getChatUser(msg.chat, msg.sender)
+    const chat = await db.getChat(msg.chat)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
 
     if (chat.adminonly || !chat.rpg)
@@ -23,7 +23,7 @@ export default {
     const cantidad = Math.floor(Math.random() * 5000)    
     user.crimeCooldown = Date.now() + 10 * 60 * 1000
 
-   await updateChatUser(msg.chat, msg.sender, 'crimeCooldown', user.crimeCooldown)
+   await db.updateChatUser(msg.chat, msg.sender, 'crimeCooldown', user.crimeCooldown)
 
     const successMessages = [
       `Realizaste un espectacular atraco a un banco y ganaste *¥${cantidad.toLocaleString()} ${monedas}*!`,
@@ -62,8 +62,8 @@ export default {
       }
     }
 
-     await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-     await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+     await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+     await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
      await sock.reply(msg.chat, `「✿」 ${message}`, msg)
   },
 };

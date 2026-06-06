@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 
 export default {
@@ -12,11 +12,11 @@ export default {
       const packName = args.join(' ').trim().toLowerCase()      
       let pack = null
       let packOwner = msg.sender
-      const stickerPackData = await getStickersPack(msg.sender)
+      const stickerPackData = await db.getStickersPack(msg.sender)
       const myPacks = stickerPackData.packs || []
       pack = myPacks.find(p => p.name.toLowerCase() === packName)
       if (!pack) {
-        const allUsers = await getStickersPack()
+        const allUsers = await db.getStickersPack()
         for (const userData of allUsers) {
           const userPacks = userData.packs ? (typeof userData.packs === 'string' ? JSON.parse(userData.packs) : userData.packs) : []
           const publicPack = userPacks.find(p => p.name.toLowerCase() === packName && p.spackpublic === 1)
@@ -47,7 +47,7 @@ export default {
       const selected = validStickers.slice(0, MAX_STICKERS)
       const cover = selected[0]
       let packOwnerUser = null;
-      try { packOwnerUser = db.getUser(packOwner); } catch {}
+      try { packOwnerUser = db.db.getUser(packOwner); } catch {}
       const name = packOwnerUser?.name || packOwner.split('@')[0]
       const ownerMeta1 = packOwnerUser?.metadatos ? String(packOwnerUser.metadatos).trim() : '';
       const ownerMeta2 = packOwnerUser?.metadatos2 ? String(packOwnerUser.metadatos2).trim() : '';

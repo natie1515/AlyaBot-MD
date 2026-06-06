@@ -1,11 +1,11 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setbye'],
   category: 'grupo',
   isAdmin: true,
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat;
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
 
     if (!args.length) {
       return msg.reply(`ꕤ ꨩᰰ𑪐𑂺 ˳ ׄ Set Bye ࣭𑁯ᰍ   ̊ ܃܃
@@ -36,7 +36,7 @@ ${prefix + command} 0`);
       }
       chat.byeMessage = '';
 
-   await updateChat(msg.chat, 'byeMessage', chat.byeMessage)
+   await db.updateChat(msg.chat, 'byeMessage', chat.byeMessage)
       return msg.reply('✐ Mensaje de despedida eliminado.');
     }
 
@@ -47,7 +47,7 @@ ${prefix + command} 0`);
     const texto = args.join(' ');
     chat.byeMessage = texto;
 
-   await updateChat(msg.chat, 'byeMessage', chat.byeMessage)
+   await db.updateChat(msg.chat, 'byeMessage', chat.byeMessage)
 
     msg.reply(`《✎》 Nuevo mensaje de despedida configurado correctamente.`);
   }

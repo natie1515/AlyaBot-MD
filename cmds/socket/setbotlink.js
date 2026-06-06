@@ -1,10 +1,10 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setlink', 'setbotlink'],
   category: 'socket',
   run: async ({ msg, sock, args }) => {
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const config = await getSettings(idBot)
+    const config = await db.getSettings(idBot)
     const owner = config.owner ? config.owner : '' || ''
     const isOwner2 = [idBot, ...global.owner.map((number) => number + '@s.whatsapp.net')].includes(msg.sender)
     if (!isOwner2 && msg.sender !== owner) return msg.reply(mess.socket)
@@ -20,7 +20,7 @@ export default {
 
     config.link = value
 
-    await updateSettings(idBot, 'link', config.link)
+    await db.updateSettings(idBot, 'link', config.link)
     return msg.reply(`✎ Se cambió el enlace del Socket correctamente.`)
   },
 };

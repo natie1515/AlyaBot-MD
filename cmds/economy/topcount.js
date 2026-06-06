@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['topcount', 'topmensajes', 'topmsgcount', 'topmessages'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat
-    const chatData = await getChat(msg.chat)
-    const chatDatas = await getChatUser(msg.chat)
+    const chatData = await db.getChat(msg.chat)
+    const chatDatas = await db.getChatUser(msg.chat)
 
     const now = new Date()
     const cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
@@ -51,7 +51,7 @@ export default {
 
     for (let i = 0; i < pageRanking.length; i++) {
       const u = pageRanking[i]
-      const na = await getUser(u.jid) || {}
+      const na = await db.getUser(u.jid) || {}
       const name = na.name || 'Usuario'
       report += `*${start + i + 1}.* ${name}\n`
       report += `   » Mensajes: \`${u.totalMsgs}\`, Comandos: \`${u.totalCmds}\`\n`

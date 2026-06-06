@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs'
 
 global.math = global.math || {}
@@ -46,8 +46,8 @@ const generarProblema = (dificultad) => {
 
 async function run({ msg, sock: client, args, command, text, usedPrefix: prefix }) {
   const chatId = msg.chat
-  const db = await getChat(msg.chat)
-  const user = await getUser(msg.sender)
+  const db = await db.getChat(msg.chat)
+  const user = await db.getUser(msg.sender)
   const juego = global.math[chatId]
 
   if (db.adminonly || !db.rpg) {
@@ -73,7 +73,7 @@ async function run({ msg, sock: client, args, command, text, usedPrefix: prefix 
       if (respuestaUsuario === respuestaCorrecta) {
         const expaleatorio = Math.floor(Math.random() * 50) + 10
         user.exp += expaleatorio
-        await updateUser(msg.sender, 'exp', user.exp)
+        await db.updateUser(msg.sender, 'exp', user.exp)
         clearTimeout(juego.tiempoLimite)
         delete global.math[chatId]
         return sock.reply(chatId, `✎ Respuesta correcta.\n> *Ganaste ›* ${expaleatorio} Exp`, msg)

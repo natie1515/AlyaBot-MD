@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fetch from 'node-fetch';
 
 const captions = {      
@@ -69,7 +69,7 @@ export default {
   ],
   category: 'nsfw',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat);
+    const chat = await db.getChat(msg.chat);
     if (!chat.nsfw) return msg.reply(mess.nsfw);
 
     const baseCommand = resolveCommand(command);
@@ -83,7 +83,7 @@ export default {
       who = msg.quoted ? msg.quoted.sender : msg.sender;
     }
 
-    const user = await getUser(who);
+    const user = await db.getUser(who);
     const fromName = msg.pushName || 'Alguien';
     const toName = user.name || 'alguien';
 

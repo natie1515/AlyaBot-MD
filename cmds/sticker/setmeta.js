@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['setstickermeta', 'setmeta'],
   category: 'stickers',
@@ -20,8 +20,8 @@ export default {
       if (!metadatos01) {
         return msg.reply('《✧》 El nombre del pack no puede estar vacío.');
       }
-      await updateUser(msg.sender, 'metadatos', metadatos01);
-      await updateUser(msg.sender, 'metadatos2', metadatos02);
+      await db.updateUser(msg.sender, 'metadatos', metadatos01);
+      await db.updateUser(msg.sender, 'metadatos2', metadatos02);
       await sock.sendMessage(msg.chat, { text: `✎ Los metadatos de tus stickers se han actualizado correctamente.` }, { quoted: msg });
     } catch (e) {
       await msg.reply(msgglobal);

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['report', 'reporte', 'sug', 'suggest'],
   category: 'info',
@@ -7,7 +7,7 @@ export default {
     const now = Date.now()
 
     try {
-      const userData = await getUser(msg.sender)
+      const userData = await db.getUser(msg.sender)
 
       const cooldown = userData.sugCooldown || 0
       const restante = cooldown - now
@@ -52,7 +52,7 @@ export default {
       }
 
       userData.sugCooldown = now + 24 * 60 * 60000
-      await updateUser(msg.sender, 'sugCooldown', userData.sugCooldown)
+      await db.updateUser(msg.sender, 'sugCooldown', userData.sugCooldown)
 
       msg.reply(
         `《✤》 Gracias por tu *${(command === 'report' || command === 'reporte') ? 'reporte' : 'sugerencia'}*\n\n> Tu mensaje fue enviado correctamente a los moderadores`

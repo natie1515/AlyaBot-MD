@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['removesale', 'removerventa'],
   category: 'gacha',
@@ -8,7 +8,7 @@ export default {
     const userId = msg.sender
     const characterName = args.join(' ')?.trim()?.toLowerCase()
 
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -16,7 +16,7 @@ export default {
     if (!characterName) 
       return msg.reply('《✤》 Especifica el nombre del personaje que deseas cancelar.')
 
-    const userData = await getChatUser(chatId, userId)
+    const userData = await db.getChatUser(chatId, userId)
 
     if (!userData.personajesEnVenta?.length) 
       return msg.reply('✤ No tienes personajes en venta.')
@@ -30,12 +30,12 @@ export default {
 
     const personajeCancelado = userData.personajesEnVenta.splice(index, 1)[0]
     
-    await updateChatUser(chatId, userId, 'personajesEnVenta', userData.personajesEnVenta)
+    await db.updateChatUser(chatId, userId, 'personajesEnVenta', userData.personajesEnVenta)
 
     if (!userData.characters) userData.characters = []
     userData.characters.push(personajeCancelado)
     
-    await updateChatUser(chatId, userId, 'characters', userData.characters)
+    await db.updateChatUser(chatId, userId, 'characters', userData.characters)
 
     await sock.reply(chatId, `✐ Tu personaje *${personajeCancelado.name}* ha sido retirado de la venta.`, msg)
     } catch (e) {

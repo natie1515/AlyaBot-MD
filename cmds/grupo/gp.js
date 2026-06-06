@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['gp', 'groupinfo'],
   category: 'grupo',
@@ -11,11 +11,11 @@ export default {
     const groupCreator = groupMetadata.owner ? '@' + groupMetadata.owner.split('@')[0] : 'Desconocido'
     const totalParticipants = groupMetadata.participants.length
 
-    const chat = await getChat(msg.chat)
-    const chatUsers = await getChatUser(msg.chat)
+    const chat = await db.getChat(msg.chat)
+    const chatUsers = await db.getChatUser(msg.chat)
 
     const botId = sock.user.id.split(':')[0] + "@s.whatsapp.net"
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
 
     const botname = botSettings.namebot2
     const monedas = botSettings.currency

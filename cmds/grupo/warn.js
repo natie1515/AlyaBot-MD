@@ -1,11 +1,11 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['warn'],
   category: 'group',
   isAdmin: true,
   run: async ({ msg, sock, args }) => {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     const mentioned = msg.mentionedJid
     const targetId = mentioned.length > 0
       ? mentioned[0]
@@ -20,7 +20,7 @@ export default {
     try {
       if (!targetId) return msg.reply('《✤》 Debes mencionar o responder al usuario que deseas advertir.')
 
-      const user = await getChatUser(msg.chat, targetId)
+      const user = await db.getChatUser(msg.chat, targetId)
 
       if (!user.warnings) user.warnings = []
 
@@ -40,11 +40,11 @@ export default {
         by: msg.sender,
       })
 
-      await updateChatUser(msg.chat, targetId, 'warnings', user.warnings)
+      await db.updateChatUser(msg.chat, targetId, 'warnings', user.warnings)
 
       const total = user.warnings.length
 
-      const nam = await getUser(targetId)
+      const nam = await db.getUser(targetId)
       const name = nam.name || 'Usuario'
       const warningList = user.warnings
         .map((w, i) => {
@@ -62,8 +62,8 @@ export default {
         try {
           await sock.groupParticipantsUpdate(msg.chat, [targetId], 'remove')
           
-          const deleted = deletedb('user', targetId)
-          const deletedChat = deletedb('chatuser', msg.chat, targetId)
+          const deleted = db.deletedb('user', targetId)
+          const deletedChat = db.deletedb('chatuser', msg.chat, targetId)
 
           if (deleted || deletedChat) {
             message += `\n\n> ❖ El usuario ha alcanzado el límite de advertencias y fue expulsado del grupo.`

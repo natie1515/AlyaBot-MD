@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['withdraw', 'with'],
   category: 'rpg',
@@ -6,13 +6,13 @@ export default {
     const chatId = msg.chat
     const senderId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
-    const chatData = await getChat(msg.chat)
+    const botSettings = await db.getSettings(botId)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const currency = botSettings.currency || 'Monedas'
 
     if (!args[0]) return msg.reply(`《✤》 Ingresa la cantidad de *${currency}* que quieras retirar.`)
@@ -25,8 +25,8 @@ export default {
       user.bank = 0
       user.coins = (user.coins || 0) + amount
 
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
 
       return msg.reply(`✐ Has retirado *¥${amount.toLocaleString()} ${currency}* de tu Banco.`)
     }
@@ -42,8 +42,8 @@ export default {
     user.bank -= count
     user.coins = (user.coins || 0) + count
 
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
 
     await msg.reply(`✐ Has retirado *¥${count.toLocaleString()} ${currency}* de tu Banco.`)
   },

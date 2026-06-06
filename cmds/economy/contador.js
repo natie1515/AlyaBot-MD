@@ -1,16 +1,16 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['count', 'mensajes', 'messages', 'msgcount'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat
-    const chatData = await getChat(msg.chat)
+    const chatData = await db.getChat(msg.chat)
 
     const mentioned = msg.mentionedJid
     const who = mentioned.length > 0 ? mentioned[0] : (msg.quoted ? msg.quoted.sender : msg.sender)
 
-   const user = await getChatUser(msg.chat, who)
+   const user = await db.getChatUser(msg.chat, who)
     if (!user)
       return msg.reply(`「✎」 El usuario mencionado no está registrado en el bot.`)
 

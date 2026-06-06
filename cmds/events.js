@@ -1,5 +1,5 @@
 import { normalizeJid, resolveParticipantJid, resolveJidSync, deleteCachedMeta, getCachedMeta, setCachedMeta } from '#serialize';
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import chalk from 'chalk';
 import moment from 'moment-timezone';
 import { prepareWAMessageMedia } from 'baileys';
@@ -34,8 +34,8 @@ export default async (sock, msg) => {
       const groupAdmins = metadata ? getGroupAdmins(metadata.participants) : [];
       const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
       
-      const chat = await getChat(anu.id);
-      const botSettings = await getSettings(botId);
+      const chat = await db.getChat(anu.id);
+      const botSettings = await db.getSettings(botId);
       
       const primaryBotId = chat?.primaryBot;
       const isSelf = (botSettings?.self ?? 0) || (chat?.isMute ?? false);
@@ -53,7 +53,7 @@ export default async (sock, msg) => {
         if (!jid) continue;
         
         const phone = jid.split('@')[0];
-        const userData = await getUser(jid);
+        const userData = await db.getUser(jid);
         const name = userData?.name || phone;
         
         const avatar = await sock.profilePictureUrl(jid, 'image').catch(() => "https://cloud.stellarwa.xyz/i6AeOyYU.jpeg");

@@ -1,11 +1,11 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['warns'],
   category: 'group',
   isAdmin: true,
   run: async ({ msg, sock, args }) => {
-    const chat = await getChat(msg.chat)
+    const chat = await db.getChat(msg.chat)
     const mentioned = msg.mentionedJid
     const userId =
       mentioned.length > 0
@@ -14,8 +14,8 @@ export default {
         ? msg.quoted.sender
         : false
 
-    const user = await getChatUser(msg.chat, userId)
-    const nam = await getUser(userId)
+    const user = await db.getChatUser(msg.chat, userId)
+    const nam = await db.getUser(userId)
 
     if (!userId || !user) {
       return msg.reply('《✤》 Menciona o responde a un usuario válido para ver sus advertencias.')

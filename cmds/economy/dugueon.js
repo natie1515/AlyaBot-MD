@@ -1,12 +1,12 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['dungeon', 'mazmorra'],
   category: 'rpg',
     run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chat = await getChat(msg.chat)
-    const user = await getChatUser(msg.chat, msg.sender)
+    const chat = await db.getChat(msg.chat)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const currency = botSettings.currency
     if (chat.adminonly || !chat.rpg)
       return msg.reply(mess.comandooff)    
@@ -22,7 +22,7 @@ export default {
       cantidad = Math.floor(Math.random() * (15000 - 12000 + 1)) + 12000
       user.coins += cantidad
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coin)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coin)
       const successMessages = [
         `Derrotaste al guardián de las ruinas y reclamaste el tesoro antiguo, ganaste *¥${cantidad.toLocaleString()} ${currency}*.`,
         `Descifraste los símbolos rúnicos y obtuviste recompensas ocultas, ganaste *¥${cantidad.toLocaleString()} ${currency}*.`,
@@ -42,22 +42,22 @@ export default {
       if (total >= cantidad) {
         if (user.coins >= cantidad) {
           user.coins -= cantidad
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
         } else {
           const restante = cantidad - user.coins
           user.coins = 0
           user.bank -= restante
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
         }
       } else {
         cantidad = total
         user.coins = 0
         user.bank = 0
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
       }
       const failMessages = [
         `Un espectro maldito te drena energía antes de que puedas escapar, perdiste *¥${cantidad.toLocaleString()} ${currency}*.`,
@@ -81,7 +81,7 @@ export default {
     }
     user.lastdungeon = Date.now() + 17 * 60 * 1000
 
-   await updateChatUser(msg.chat, msg.sender, 'lastdungeon', user.lastdungeon)
+   await db.updateChatUser(msg.chat, msg.sender, 'lastdungeon', user.lastdungeon)
     await sock.sendMessage(msg.chat, { text: `「✿」 ${message}` }, { quoted: msg })
   },
 }

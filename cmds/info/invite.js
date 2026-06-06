@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 function msToTime(duration) {
   const milliseconds = parseInt((duration % 1000) / 100)
   let seconds = Math.floor((duration / 1000) % 60)
@@ -28,7 +28,7 @@ export default {
     const grupo = msg.isGroup ? await getGroupName(sock, msg.chat) : 'Chat privado'
 
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const botname = botSettings.namebot2
 
     const link = args.join(' ')

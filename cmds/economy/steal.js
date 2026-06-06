@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['steal', 'rob', 'robar'],
@@ -7,9 +7,9 @@ export default {
     try {
       const chatId = msg.chat
       const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-      const botSettings = await getSettings(botId)
+      const botSettings = await db.getSettings(botId)
       const monedas = botSettings.currency
-      const chatData = await getChat(msg.chat)
+      const chatData = await db.getChat(msg.chat)
 
       if (chatData.adminonly || !chatData.rpg)
         return msg.reply(mess.comandooff)
@@ -20,9 +20,9 @@ export default {
       if (!target || target === msg.sender)
         return msg.reply(`《✤》 Debes mencionar a quien quieras robarle *${monedas}*.`)
 
-      const senderData = await getChatUser(msg.chat, msg.sender)
-      const targetData = await getChatUser(msg.chat, target)
-      const na = await getUser(target)
+      const senderData = await db.getChatUser(msg.chat, msg.sender)
+      const targetData = await db.getChatUser(msg.chat, target)
+      const na = await db.getUser(target)
 
       if (!targetData) {
         return msg.reply('ꕥ El usuario *mencionado* no está *registrado* en el bot')
@@ -50,14 +50,14 @@ export default {
         )
 
       senderData.roboCooldown = Date.now() + 30 * 60 * 1000 // 30 minutos
-      await updateChatUser(msg.chat, msg.sender, 'roboCooldown', senderData.roboCooldown)
+      await db.updateChatUser(msg.chat, msg.sender, 'roboCooldown', senderData.roboCooldown)
 
       const cantidadRobada = Math.min(Math.floor(Math.random() * 5000) + 50, targetData.coins)
       senderData.coins += cantidadRobada
       targetData.coins -= cantidadRobada
 
-      await updateChatUser(msg.chat, msg.sender, 'coins', senderData.coins)
-      await updateChatUser(msg.chat, target, 'coins', targetData.coins)
+      await db.updateChatUser(msg.chat, msg.sender, 'coins', senderData.coins)
+      await db.updateChatUser(msg.chat, target, 'coins', targetData.coins)
 
       await sock.reply(
         chatId,

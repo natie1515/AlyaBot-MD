@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { readFileSync } from 'fs'
 
 function formatDate(timestamp) {
@@ -28,7 +28,7 @@ export default {
     const chatId = msg.chat
     const senderId = msg.sender
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -42,7 +42,7 @@ export default {
     if (mentionedJid === senderId)
       return msg.reply('✐ No puedes regalarte un personaje a ti mismo.')
 
-    const senderData = await getChatUser(chatId, senderId)
+    const senderData = await db.getChatUser(chatId, senderId)
     
     if (!senderData?.characters?.length) 
       return msg.reply('✐ No tienes personajes en tu inventario.')
@@ -76,10 +76,10 @@ export default {
         claim: formatDate(Date.now())
       }
 
-      let receiver = await getChatUser(chatId, mentionedJid)
+      let receiver = await db.getChatUser(chatId, mentionedJid)
       
       if (!receiver) {
-        receiver = await getChatUser(chatId, mentionedJid)
+        receiver = await db.getChatUser(chatId, mentionedJid)
       }
 
       if (!Array.isArray(receiver.characters)) {
@@ -87,10 +87,10 @@ export default {
       }
 
       receiver.characters.push(reservedCharacter)
-      await updateChatUser(chatId, mentionedJid, 'characters', receiver.characters)
+      await db.updateChatUser(chatId, mentionedJid, 'characters', receiver.characters)
 
       senderData.characters.splice(characterIndex, 1)
-      await updateChatUser(chatId, senderId, 'characters', senderData.characters)
+      await db.updateChatUser(chatId, senderId, 'characters', senderData.characters)
 
       const message = `✐ *${reservedCharacter.name}* ha sido regalado a *@${mentionedJid.split('@')[0]}*.`
 

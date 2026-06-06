@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 export default {
   command: ['givecoins', 'pay', 'coinsgive'],
@@ -8,9 +8,9 @@ export default {
     try {
     const chatId = msg.chat
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency || 'coins'
-    const chatData = await getChat(msg.chat)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
@@ -21,8 +21,8 @@ export default {
 
     if (!who) return msg.reply(`《✤》 Debes mencionar a quien quieras transferir *${monedas}*.`)
 
-    const senderData = await getChatUser(msg.chat, msg.sender)
-    const targetData = await getChatUser(msg.chat, who)
+    const senderData = await db.getChatUser(msg.chat, msg.sender)
+    const targetData = await db.getChatUser(msg.chat, who)
 
     if (!targetData) return msg.reply(`「✿」 El usuario mencionado no está registrado en el bot.`)
 
@@ -40,8 +40,8 @@ export default {
     senderData.coins -= cantidad
     targetData.coins += cantidad
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', senderData.coins)
-   await updateChatUser(msg.chat, who, 'coins', targetData.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', senderData.coins)
+   await db.updateChatUser(msg.chat, who, 'coins', targetData.coins)
 
       const cantidadFormatted = cantidad.toLocaleString()
       const textoTransferencia = `*¥${cantidadFormatted} ${monedas}*`

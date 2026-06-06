@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: [
     'welcome', 'bienvenidas',
@@ -12,7 +12,7 @@ export default {
   category: 'grupo',
   isAdmin: true,
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
-    const chatData = await getChat(msg.chat)
+    const chatData = await db.getChat(msg.chat)
     const stateArg = args[0]?.toLowerCase()
     const validStates = ['on', 'off', 'enable', 'disable']
 
@@ -92,7 +92,7 @@ export default {
       return msg.reply(`《✤》 *${titulo}* ya estaba *${enabled ? 'activado' : 'desactivado'}*.`)
     }
 
-    await updateChat(msg.chat, normalizedKey, enabled ? 1 : 0)
+    await db.updateChat(msg.chat, normalizedKey, enabled ? 1 : 0)
 
     return msg.reply(`✎ Has *${enabled ? 'activado' : 'desactivado'}* ${nombreBonito}.`)
   }

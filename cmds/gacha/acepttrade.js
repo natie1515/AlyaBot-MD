@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['accepttrade', 'aceptarintercambio'],
   category: 'gacha',
@@ -6,7 +6,7 @@ export default {
     const chatId = msg.chat
     const userId = msg.sender
     
-    const chatConfig = await getChat(chatId)
+    const chatConfig = await db.getChat(chatId)
     
     if (chatConfig.adminonly || !chatConfig.gacha)
       return msg.reply(mess.comandooff)
@@ -28,8 +28,8 @@ export default {
     if (!intercambio) 
       return msg.reply('《✤》 No tienes ninguna solicitud de intercambio activa.')
 
-    const solicitante = await getChatUser(chatId, intercambio.solicitante)
-    const destinatario = await getChatUser(chatId, intercambio.destinatario)
+    const solicitante = await db.getChatUser(chatId, intercambio.solicitante)
+    const destinatario = await db.getChatUser(chatId, intercambio.destinatario)
 
     solicitante.characters = [
       ...(solicitante.characters || []).filter((c) => c.name !== intercambio.personaje1.name),
@@ -41,15 +41,15 @@ export default {
       intercambio.personaje1,
     ]
 
-    await updateChatUser(chatId, intercambio.solicitante, 'characters', solicitante.characters)
-    await updateChatUser(chatId, intercambio.destinatario, 'characters', destinatario.characters)
+    await db.updateChatUser(chatId, intercambio.solicitante, 'characters', solicitante.characters)
+    await db.updateChatUser(chatId, intercambio.destinatario, 'characters', destinatario.characters)
 
     intercambios = intercambios.filter((i) => i !== intercambio)
-    await updateChat(chatId, 'intercambios', intercambios)
-    await updateChat(chatId, 'timeTrade', 0)
+    await db.updateChat(chatId, 'intercambios', intercambios)
+    await db.updateChat(chatId, 'timeTrade', 0)
 
-    const solicitanteGlobal = await getUser(intercambio.solicitante)
-    const destinatarioGlobal = await getUser(intercambio.destinatario)
+    const solicitanteGlobal = await db.getUser(intercambio.solicitante)
+    const destinatarioGlobal = await db.getUser(intercambio.destinatario)
     
     const nombreSolicitante = solicitanteGlobal?.name || intercambio.solicitante.split('@')[0]
     const nombreDestinatario = destinatarioGlobal?.name || intercambio.destinatario.split('@')[0]

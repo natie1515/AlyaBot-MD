@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['sell', 'vender'],
   category: 'gacha',
@@ -7,11 +7,11 @@ export default {
     const userId = msg.sender
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
 
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const currency = botSettings.currency
     const botname = botSettings.namebot2
 
-    const chatData = await getChat(chatId)
+    const chatData = await db.getChat(chatId)
     if (chatData.adminonly || !chatData.gacha)
       return msg.reply(mess.comandooff)
 
@@ -22,7 +22,7 @@ export default {
       if (!personajeNombre || isNaN(precioCoins))
         return msg.reply('《✤》 Especifica el valor y el nombre de la waifu a vender.')
 
-      const userData = await getChatUser(chatId, userId)
+      const userData = await db.getChatUser(chatId, userId)
       if (!userData?.characters?.length) return msg.reply('✐ No tienes personajes en tu inventario.')
 
       const characterIndex = userData.characters.findIndex(
@@ -55,8 +55,8 @@ export default {
 
       userData.characters.splice(characterIndex, 1)
 
-      await updateChatUser(chatId, userId, 'personajesEnVenta', userData.personajesEnVenta)
-      await updateChatUser(chatId, userId, 'characters', userData.characters)
+      await db.updateChatUser(chatId, userId, 'personajesEnVenta', userData.personajesEnVenta)
+      await db.updateChatUser(chatId, userId, 'characters', userData.characters)
 
       const mensaje = `❒ *${character.name}* ha sido puesto a la venta!
 
@@ -76,10 +76,10 @@ ${dev}`
 
 setInterval(async () => {
   try {
-    const allChats = await getChat()
+    const allChats = await db.getChat()
     
     for (const chat of allChats) {
-      const chatUsers = await getChatUser(chat.id)
+      const chatUsers = await db.getChatUser(chat.id)
       
       for (const user of chatUsers) {
         if (Array.isArray(user.personajesEnVenta) && user.personajesEnVenta.length > 0) {
@@ -90,14 +90,14 @@ setInterval(async () => {
             if (expired) {
               if (!user.characters) user.characters = []
               user.characters.push(p)
-              await updateChatUser(chat.id, user.user_id, 'characters', user.characters)
+              await db.updateChatUser(chat.id, user.user_id, 'characters', user.characters)
             } else {
               validos.push(p)
             }
           }
 
           if (validos.length !== user.personajesEnVenta.length) {
-            await updateChatUser(chat.id, user.user_id, 'personajesEnVenta', validos)
+            await db.updateChatUser(chat.id, user.user_id, 'personajesEnVenta', validos)
           }
         }
       }

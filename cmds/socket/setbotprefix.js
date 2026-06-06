@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import GraphemeSplitter from 'grapheme-splitter'
 
 export default {
@@ -6,7 +6,7 @@ export default {
   category: 'socket',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const idBot = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const config = await getSettings(idBot)
+    const config = await db.getSettings(idBot)
     const owner = config.owner ? config.owner : '' || ''
     const isOwner2 = [idBot, ...(config.owner ? [config.owner] : []), ...global.owner.map(num => num + '@s.whatsapp.net')].includes(msg.sender)
     if (!isOwner2) return sock.reply(msg.chat, mess.socket, msg)
@@ -30,14 +30,14 @@ export default {
     if (value.toLowerCase() === 'reset') {
       config.prefijo = defaultPrefix
 
-   await updateSettings(idBot, 'prefijo', config.prefijo)
+   await db.updateSettings(idBot, 'prefijo', config.prefijo)
       return sock.reply(msg.chat, `❖ Se han restaurado los prefijos predeterminados: *${defaultPrefix.join(' ')}*`, msg)
     }
 
     if (value.toLowerCase() === 'noprefix') {
       config.prefijo = 1
 
-   await updateSettings(idBot, 'prefijo', config.prefijo)
+   await db.updateSettings(idBot, 'prefijo', config.prefijo)
       return msg.reply(`❖ Se cambió al modo sin prefijos para el Socket correctamente.`)
     }
 
@@ -60,7 +60,7 @@ export default {
 
     config.prefijo = lista
 
-   await updateSettings(idBot, 'prefijo', config.prefijo)
+   await db.updateSettings(idBot, 'prefijo', config.prefijo)
     return sock.reply(msg.chat, `✤ Se cambió el prefijo del Socket a *${lista.join(' ')}* correctamente.`, msg)
   },
 }

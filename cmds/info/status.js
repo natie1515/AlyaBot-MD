@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 import os from 'os';
 
@@ -14,12 +14,12 @@ export default {
   category: 'info',
   run: async ({ msg, sock }) => {
 
-    const users = await getUser()
+    const users = await db.getUser()
     const hostId = getDefaultHostId()
-    const chats = await getChat()
+    const chats = await db.getChat()
     const registeredGroups = chats ? Object.keys(chats).length : 0
     const botId = sock.user.id.split(':')[0] + "@s.whatsapp.net" || false
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
 
     const botname = botSettings.namebot || 'Ai Surus'
     const comandos = botSettings.commandsejecut || '0'

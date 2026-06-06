@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 
 const linkRegex = /(https?:\/\/)?(chat\.whatsapp\.com\/[0-9A-Za-z]{20,24}|whatsapp\.com\/channel\/[0-9A-Za-z]{20,24})/i
 
@@ -14,11 +14,11 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
   const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
   if (!groupMetadata) return;
 
-  const botSettings = await getSettings(botId);
+  const botSettings = await db.getSettings(botId);
   const isSelf = botSettings?.self ?? 0;
   if (isSelf) return;
 
-  const chat = await getChat(msg.chat);
+  const chat = await db.getChat(msg.chat);
   const primaryBotId = chat?.primaryBot;
   const isPrimary = !primaryBotId || primaryBotId === botId;
 
@@ -49,7 +49,7 @@ export async function before({ msg, sock, groupMetadata, participants, isAdmins,
       }).catch(() => {});
     }
 
-    const ysr = await getUser(msg.sender);
+    const ysr = await db.getUser(msg.sender);
     const userName = ysr?.name || msg.pushName || 'Usuario';
 
     setTimeout(async () => {

@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import fs from 'fs';
 import path from 'path';
 import ws from 'ws';
@@ -12,7 +12,7 @@ export default {
   category: 'socket',
   run: async ({ msg, sock }) => {
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const bot = await getSettings(botId)
+    const bot = await db.getSettings(botId)
     const botname2 = bot.namebot2
     const from = msg.key.remoteJid
     const groupMetadata = msg.isGroup ? await sock.groupMetadata(from).catch(() => {}) : ''
@@ -47,14 +47,14 @@ export default {
       const jid = number + '@s.whatsapp.net'
       if (!groupParticipants.includes(jid)) return null
       mentionedJid.push(jid)
-      const data = await getSettings(jid)
+      const data = await db.getSettings(jid)
       const name = data?.namebot2 || 'Bot'
       const handle = `@${number}`
       return `- [${label} *${name}*] › ${handle}`
     }
 
-    if (getSettings(mainBotJid)) {
-      const name = (await getSettings(mainBotJid))?.namebot2
+    if (db.getSettings(mainBotJid)) {
+      const name = (await db.getSettings(mainBotJid))?.namebot2
       const handle = `@${mainBotJid.split('@')[0]}`
       if (isMainBotInGroup) {
         mentionedJid.push(mainBotJid)

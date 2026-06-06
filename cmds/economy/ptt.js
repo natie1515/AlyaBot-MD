@@ -1,20 +1,20 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['ppt'],
   category: 'rpg',
   run: async ({ msg, sock, args, command, text, usedPrefix: prefix }) => {
     const chatId = msg.chat
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
     const monedas = botSettings.currency
-    const chatData = await getChat(msg.chat)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)   
+    const user = await db.getChatUser(msg.chat, msg.sender)   
 
-    const user2 = await getUser(msg.sender)
+    const user2 = await db.getUser(msg.sender)
     const remainingTime = user.pptCooldown - Date.now()
 
     if (remainingTime > 0)
@@ -39,8 +39,8 @@ export default {
       user.coins += reward
       user2.exp += exp
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-  await updateUser(msg.sender, 'exp', user2.exp)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+  await db.updateUser(msg.sender, 'exp', user2.exp)
 
       await sock.reply(
         chatId,
@@ -54,14 +54,14 @@ export default {
       if (user.coins >= actualLoss) {
         user.coins -= actualLoss
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
       } else {
         const remaining = actualLoss - user.coins
         user.coins = 0
         user.bank = Math.max(0, user.bank - remaining)
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-   await updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateChatUser(msg.chat, msg.sender, 'bank', user.bank)
       }
 
       await sock.reply(
@@ -73,8 +73,8 @@ export default {
       user.coins += tieReward
       user2.exp += tieExp
 
-   await updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
-   await updateUser(msg.sender, 'exp', user2.exp)
+   await db.updateChatUser(msg.chat, msg.sender, 'coins', user.coins)
+   await db.updateUser(msg.sender, 'exp', user2.exp)
       await sock.reply(
         chatId,
         `✿ Empate.\n\n> *Tu elección ›* ${userChoice}\n> *Bot eligió ›* ${botChoice}\n> *${monedas} ›* +¥${tieReward.toLocaleString()}\n> *Exp ›* +${tieExp}\n\n${dev}`,
@@ -83,7 +83,7 @@ export default {
     }
    
     user.pptCooldown = Date.now() + 10 * 60 * 1000 // 10 minutos
-   await updateChatUser(msg.chat, msg.sender, 'pptCooldown', user.pptCooldown)
+   await db.updateChatUser(msg.chat, msg.sender, 'pptCooldown', user.pptCooldown)
   },
 }
 

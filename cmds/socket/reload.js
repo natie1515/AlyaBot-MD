@@ -1,4 +1,4 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 import { startSubBot } from '../../cmds/socket/subbot.js';
 import fs from 'fs';
 import path from 'path';
@@ -23,7 +23,7 @@ export default {
     }
 
     const botId = sock?.user?.id.split(':')[0] + '@s.whatsapp.net' || ''
-    const botSettings = await getSettings(botId) || {}
+    const botSettings = await db.getSettings(botId) || {}
 
     const isOficialBot = botId === global.sock.user.id.split(':')[0] + '@s.whatsapp.net'
 

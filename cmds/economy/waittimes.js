@@ -1,18 +1,18 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
+import db from "#db"
 export default {
   command: ['waittimes', 'cooldowns', 'economyinfo', 'einfo'],
   category: 'rpg',
   run: async ({ msg, sock }) => {
     const chatId = msg.chat
     const botId = sock.user.id.split(':')[0] + "@s.whatsapp.net"
-    const botSettings = await getSettings(botId)
+    const botSettings = await db.getSettings(botId)
 
-    const chatData = await getChat(msg.chat)
+    const chatData = await db.getChat(msg.chat)
 
     if (chatData.adminonly || !chatData.rpg)
       return msg.reply(mess.comandooff)
 
-    const user = await getChatUser(msg.chat, msg.sender)
+    const user = await db.getChatUser(msg.chat, msg.sender)
     const now = Date.now()
     const oneDay = 24 * 60 * 60 * 1000
 
