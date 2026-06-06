@@ -10,7 +10,7 @@ import path from "path";
 import readlineSync from "readline-sync";
 import cmdsLoader from '#cmdsloader';
 import { smsg, setCachedMeta } from "#serialize";
-import database from "#database";
+import database from "#db";
 import { startSubBot } from '#cmds/socket/subbot';
 
 const log = {
