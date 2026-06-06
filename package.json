@@ -1,7 +1,7 @@
 {
   "name": "alya",
-  "version": "4.0.0",
-  "description": "WhatsApp Bot actualizado a la última versión.",
+  "version": "4.0",
+  "description": "WhatsApp Bot updated to the latest version.",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -21,24 +21,10 @@
   ],
   "author": "DevZyxlJs",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DevZyxlJs/AlyaBot-MD"
-  },
-  "bugs": {
-    "url": "https://github.com/DevZyxlJs/AlyaBot-MD/issues"
-  },
-  "homepage": "https://github.com/DevZyxlJs/AlyaBot-MD#readme",
   "engines": {
     "node": ">=22.13.0",
     "npm": ">=10.9.4"
   },
-  "contributors": [
-    {
-      "name": "DevZyxlJs",
-      "email": "devzyxl@gmail.com"
-    }
-  ],
   "dependencies": {
     "baileys": "github:this-xys/baileys",
     "yargs": "^18.0.0",
