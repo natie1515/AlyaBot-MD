@@ -1,4 +1,3 @@
-import {getUser, updateUser, getChat, updateChat, getChatUser, updateChatUser, getSettings, updateSettings, getStickersPack, updateStickersPack, deletedb, setCreate} from "#database"
 import ytsearch from "yt-search"
 import { getBuffer } from "#serialize"
 import fetch from "node-fetch"
@@ -25,14 +24,14 @@ export default {
       const canal = author?.name || author || "Desconocido"
       const thumbBuffer = await getBuffer(image)
 
-      const caption = `➥ Descargando › ${title}
+      const caption = `【　✿　】 _\`୨୧  Download\` ───── *${title}*_
 
-> ✿⃘࣪◌ ֪ Canal › ${canal}
-> ✿⃘࣪◌ ֪ Duración › ${duration || "Desconocido"}
-> ✿⃘࣪◌ ֪ Vistas › ${vistas}
-> ✿⃘࣪◌ ֪ Enlace › ${url}
+> _✐ \`Canal\` ── ${canal}_
+> _ⴵ \`Duración\` ── ${duration || ''}_
+> _✰ \`Vistas\` ── ${vistas}_
+> _🜸 \`Enlace\` ── ${url}_
 
-𐙚 ❀ ｡ ↻ El archivo se está enviando, espera un momento... ˙𐙚`
+> _──  ִ    ۟  *¡Enviando audio, por favor espera!*_`
 
       await sock.sendMessage(msg.chat, { image: thumbBuffer, caption }, { quoted: msg })
 
