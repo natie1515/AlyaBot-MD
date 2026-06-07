@@ -18,7 +18,7 @@ export default {
     const groupMetadata = msg.isGroup ? await sock.groupMetadata(from).catch(() => {}) : ''
     const groupParticipants = groupMetadata?.participants?.map((p) => p.phoneNumber || p.jid || p.lid || p.id) || []
 
-    const mainBotJid = global.sock.user.id.split(':')[0] + '@s.whatsapp.net'
+    const mainBotJid = global?.sock ? global?.sock?.user?.id?.split(':')[0] + '@s.whatsapp.net' : ''
     const isMainBotInGroup = groupParticipants.includes(mainBotJid)
 
     const basePath = path.join(dirname, '../../Sessions')
