@@ -25,7 +25,7 @@ export default {
     const botId = sock?.user?.id.split(':')[0] + '@s.whatsapp.net' || ''
     const botSettings = await db.getSettings(botId) || {}
 
-    const isOficialBot = botId === global.sock.user.id.split(':')[0] + '@s.whatsapp.net'
+    const isOficialBot = botId === global?.sock ? global?.sock?.user?.id?.split(':')[0] + '@s.whatsapp.net' : ''
 
     const botType = isOficialBot
       ? 'Principal/Owner'
