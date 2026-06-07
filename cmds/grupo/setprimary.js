@@ -36,7 +36,7 @@ export default {
       const groupMetadata = msg.isGroup ? await sock.groupMetadata(msg.chat).catch(() => {}) : ''
       const groupParticipants = groupMetadata?.participants?.map((p) => p.phoneNumber || p.jid || p.id || p.lid) || []
 
-      const mainBotJid = global.sock.user.id.split(':')[0] + '@s.whatsapp.net'
+      const mainBotJid = global?.sock ? global?.sock?.user?.id?.split(':')[0] + '@s.whatsapp.net' : ''
       const allowedBots = getAllowedBots(mainBotJid)
 
       if (!allowedBots.includes(who)) {
