@@ -46,11 +46,11 @@ const generarProblema = (dificultad) => {
 
 async function run({ msg, sock: client, args, command, text, usedPrefix: prefix }) {
   const chatId = msg.chat
-  const db = await db.getChat(msg.chat)
+  const db2 = await db.getChat(msg.chat)
   const user = await db.getUser(msg.sender)
   const juego = global.math[chatId]
 
-  if (db.adminonly || !db.rpg) {
+  if (db2.adminonly || !db2.rpg) {
     return msg.reply(mess.comandooff)
   }
 
@@ -67,7 +67,7 @@ async function run({ msg, sock: client, args, command, text, usedPrefix: prefix 
 
     const respuestaCorrecta = juego.respuesta
     const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net'
-    const primaryBotId = db.primaryBot
+    const primaryBotId = db2.primaryBot
 
     if (!primaryBotId || primaryBotId === botId) {
       if (respuestaUsuario === respuestaCorrecta) {
