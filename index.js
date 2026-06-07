@@ -2,7 +2,6 @@ import "./settings.ts";
 import "#db";
 import handler from '#handler';
 import events from '#events';
-import web from "#webs";
 import makeWASocket, { Browsers, makeCacheableSignalKeyStore, useMultiFileAuthState, fetchLatestBaileysVersion, jidDecode, DisconnectReason } from 'baileys';
 import pino from "pino";
 import qrcode from "qrcode-terminal";
