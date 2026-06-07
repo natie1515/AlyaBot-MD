@@ -34,7 +34,7 @@ export default {
       const link = botSettings.link || '';
 
       const isOficialBot =
-        botId === global.sock.user.id.split(':')[0] + '@s.whatsapp.net';
+        botId === global?.sock ? global?.sock?.user?.id?.split(':')[0] + '@s.whatsapp.net' : ''
       const botType = isOficialBot
         ? 'Owner'
         : 'Sub Bot';
