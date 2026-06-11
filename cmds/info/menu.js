@@ -4,7 +4,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { bodyMenu, menuObject } from '#system/commands'; // Importación solicitada
+import { bodyMenu, menuObject } from '#system/commandos'; // Importación solicitada
 
 export default {
   command: ['allmenu', 'help', 'menu', 'ayuda'],
