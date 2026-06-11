@@ -21,7 +21,7 @@ global.mess = {
 }
 
 global.my = {
-ch: "120363420992828502@newsletter", // Oficial
+ch: "120363188537623366@newsletter", // Oficial
 ch2: "120363405689107729@newsletter" // Api
 }
 
