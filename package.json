@@ -13,7 +13,8 @@
     "#db": "./lib/system/database.js",
     "#cmdsloader": "./lib/system/cmdsloader.js",
     "#events": "./cmds/events.js",
-    "#cmds/*": "./cmds/*.js"
+    "#cmds/*": "./cmds/*.js",
+    "#system/*": "./core/system/*.js"
   },
   "keywords": [
     "whatsapp",
