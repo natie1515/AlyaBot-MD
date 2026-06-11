@@ -2,7 +2,7 @@ import fs from 'fs';
 import { watchFile, unwatchFile } from 'fs'
 import { fileURLToPath } from 'url'
 
-global.owner = ['5492916450307']
+global.owner = ['559296077349']
 
 global.api = {
   url: 'https://api.stellarwa.xyz',
@@ -10,7 +10,7 @@ global.api = {
 }
 
 global.msgglobal = '✿⸝꙳.˖ Ocurrió un problema, contacte al creador'
-global.dev = `ʙᴜɪʟᴛ ʙʏ ɪ'ᴍ ᴅɪᴇɢᴏ ♡`
+global.dev = `ʙᴜɪʟᴛ ʙʏ ⁿᵏGwee ⚝`
 
 global.mess = {
   socket: '(∩´͈ ᴖ `͈∩ ྀི) Este comando solo puede ser ejecutado por un Socket.',
